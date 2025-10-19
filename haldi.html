@@ -5,15 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Haldi Ceremony — Zauq-e-Zareen</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Scheherazade+New:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --marigold:#FFD54F;
-  --orange:#FFA726;
-  --cream:#FFF8E1;
-  --gold:#E6B31E;
-  --ink:rgba(0,0,0,.22);
+  --marigold:#FFD54F;   /* base */
+  --orange:#FFA726;     /* warmth tint */
+  --cream:#FFF8E1;      /* not used for text now, kept for accents */
+  --gold:#E6B31E;       /* outlines (motifs/border) */
+  --white:#FFFFFF;      /* text color */
+  --shade:rgba(0,0,0,.18);
 }
 
 /* Base */
@@ -22,140 +23,192 @@ html,body{height:100%}
 body{
   margin:0;
   background:
-    radial-gradient(1400px 700px at 50% -10%, rgba(230,179,30,.12), transparent 60%),
-    radial-gradient(1400px 700px at 50% 110%, rgba(255,167,38,.10), transparent 60%),
+    radial-gradient(1200px 600px at 50% -10%, rgba(0,0,0,.08), transparent 60%),
+    radial-gradient(1400px 700px at 50% 110%, rgba(0,0,0,.08), transparent 60%),
+    linear-gradient(180deg, rgba(255,167,38,.25), rgba(255,213,79,.25)),
     var(--marigold);
-  color:var(--cream);
+  color:var(--white);
   font-family:"Source Sans 3",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Open Sans",sans-serif;
   line-height:1.48;
   overflow-x:hidden;
 }
 
-/* Sunburst rays (subtle motion) */
-.rays{
-  position:fixed; inset:-10% -10% -10% -10%; z-index:0; pointer-events:none;
-  background:
-    conic-gradient(from 0deg at 50% 30%, rgba(230,179,30,.25), transparent 20%, rgba(230,179,30,.18), transparent 40%, rgba(230,179,30,.25), transparent 60%, rgba(230,179,30,.18), transparent 80%, rgba(230,179,30,.25));
-  animation: spin 80s linear infinite;
-  filter: blur(1px);
-  opacity:.25;
+/* Gentle vignette to tone brightness */
+.vignette{
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  background: radial-gradient(1200px 600px at 50% 10%, transparent 50%, rgba(0,0,0,.16) 95%);
 }
-@keyframes spin{ to{ transform: rotate(360deg) } }
 
-/* Page & Ornate border (gold leaf illusion) */
+/* Falling marigold flowers */
+.flowers{
+  position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden;
+}
+.flower{
+  position:absolute; width:42px; height:42px; opacity:.55;
+  background-repeat:no-repeat; background-size:contain; background-position:center;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.25));
+  animation: fall linear infinite, sway 6s ease-in-out infinite;
+}
+@keyframes fall{
+  0%   { transform: translateY(-10vh) rotate(0deg);   opacity:.0; }
+  10%  { opacity:.55; }
+  100% { transform: translateY(110vh) rotate(180deg); opacity:.45; }
+}
+@keyframes sway{
+  0%,100%{ transform: translateX(-10px) }
+  50%    { transform: translateX(10px) }
+}
+/* Marigold SVGs (two variants for variety) */
+.flower[data-variant="a"]{
+  background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>\
+<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>\
+<stop offset='0' stop-color='%23FFA726'/><stop offset='1' stop-color='%23FFD54F'/>\
+</linearGradient></defs>\
+<g fill='url(%23g)' stroke='%23E6B31E' stroke-width='1'>\
+<circle cx='32' cy='16' r='10'/><circle cx='48' cy='24' r='10'/>\
+<circle cx='48' cy='40' r='10'/><circle cx='32' cy='48' r='10'/>\
+<circle cx='16' cy='40' r='10'/><circle cx='16' cy='24' r='10'/>\
+</g><circle cx='32' cy='32' r='8' fill='%23E6B31E'/></svg>");
+}
+.flower[data-variant="b"]{
+  background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>\
+<defs><radialGradient id='rg' cx='50%' cy='50%' r='60%'>\
+<stop offset='0' stop-color='%23FFD54F'/><stop offset='1' stop-color='%23FFA726'/>\
+</radialGradient></defs>\
+<g fill='url(%23rg)' stroke='%23E6B31E' stroke-width='1'>\
+<path d='M32 10c8 0 12 10 12 10s10 4 10 12-10 12-10 12-4 10-12 10-12-10-12-10-10-4-10-12 10-12 10-12 4-10 12-10z'/>\
+</g><circle cx='32' cy='32' r='6' fill='%23E6B31E'/></svg>");
+}
+
+/* Page container + gold border (light) */
 .page{
   min-height:100%;
   display:grid;
   place-items:center;
-  padding:6vmin 3vmin 90px;
+  padding:6vmin 3vmin 90px; /* room for bottom tabs */
   position:relative;
-  z-index:1;
+  z-index:2; /* above flowers */
 }
 .page::before{
-  /* Gold leafy edge via layered gradients */
   content:"";
   position:fixed; inset:18px; border-radius:18px; pointer-events:none;
-  background:
-    repeating-linear-gradient(135deg, rgba(230,179,30,.18) 0 6px, rgba(255,216,120,.18) 6px 12px),
-    repeating-linear-gradient(-135deg, rgba(230,179,30,.16) 0 6px, rgba(255,216,120,.16) 6px 12px);
   box-shadow:
-    0 0 0 2px var(--gold) inset,
-    0 0 0 16px rgba(0,0,0,.10) inset,
-    0 0 0 18px var(--gold) inset;
+    0 0 0 2px rgba(230,179,30,.85) inset,
+    0 0 0 16px rgba(255,255,255,.10) inset,
+    0 0 0 18px rgba(230,179,30,.85) inset;
 }
 
-/* Mandala outlines (faint, in gold) */
-.mandalas{
-  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.22; filter:drop-shadow(0 4px 6px rgba(0,0,0,.15));
-  background:
-    url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'>\
-<g fill='none' stroke='%23E6B31E' stroke-width='1.6' stroke-opacity='.8'>\
-<circle cx='200' cy='260' r='140'/><circle cx='600' cy='520' r='160'/>\
-<circle cx='520' cy='220' r='90'/><circle cx='260' cy='560' r='110'/>\
-</g></svg>") center/cover no-repeat;
-}
-
-/* Card */
+/* Card + panel */
 .card{
   position:relative;
   max-width:min(920px,94vw);
   width:100%;
   border-radius:22px;
   padding:18px;
-  background: linear-gradient(180deg, rgba(255,167,38,.12), rgba(255,213,79,.10)) , rgba(255,213,79,.35);
+  background: rgba(255, 194, 63, .22);
   box-shadow:
-    0 0 0 2px var(--gold) inset,
-    0 0 0 14px rgba(255,184,70,.35) inset,
-    0 0 0 16px var(--gold) inset,
-    0 24px 50px rgba(0,0,0,.25);
+    0 18px 50px rgba(0,0,0,.22),
+    0 0 0 2px rgba(255,255,255,.42) inset,
+    0 0 0 16px rgba(255,255,255,.10) inset;
   overflow:hidden;
 }
-
-/* Inner panel */
 .panel{
   position:relative;
-  background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
-  border:2px solid var(--gold);
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+  border:2px solid rgba(255,255,255,.65);
   border-radius:200px/48px 48px 28px 28px;
   padding:min(8vmin,72px) min(7vmin,64px);
   overflow:hidden;
 }
-/* Faint floral vine overlay inside panel */
+/* soft inner pattern (gold vines) */
 .panel::after{
-  content:"";
-  position:absolute; inset:clamp(14px,4vmin,28px); border-radius:inherit; z-index:0; opacity:.12;
+  content:""; position:absolute; inset:clamp(14px,4vmin,28px); border-radius:inherit; z-index:0; opacity:.10;
   background:
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400'>\
-<g fill='none' stroke='%23E6B31E' stroke-width='1.5'>\
+<g fill='none' stroke='%23FFFFFF' stroke-opacity='.6' stroke-width='1.2'>\
 <path d='M40,360 C120,300 200,280 260,220 320,160 360,110 520,70'/>\
 <path d='M80,300 C140,260 200,230 260,180'/>\
 <path d='M380,340 C460,300 520,260 560,220'/>\
 </g></svg>") center/cover no-repeat;
 }
-.panel>*{position:relative;z-index:1}
+.panel > *{ position:relative; z-index:1; }
 
-/* Typography */
+/* Qawwali instrument motifs (bottom-right) */
+.motifs{
+  position:absolute; right:10px; bottom:10px; width:220px; height:120px; opacity:.8; pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='220' height='120' viewBox='0 0 220 120'>\
+<g fill='none' stroke='%23E6B31E' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'>\
+<!-- Harmonium -->\
+<rect x='10' y='60' width='90' height='40' rx='4'/>\
+<rect x='14' y='64' width='82' height='12' rx='2'/>\
+<line x1='20' y1='78' x2='92' y2='78'/>\
+<line x1='20' y1='86' x2='92' y2='86'/>\
+<circle cx='22' cy='70' r='2'/><circle cx='30' cy='70' r='2'/><circle cx='38' cy='70' r='2'/>\
+<!-- Tabla (bayan + dayan) -->\
+<ellipse cx='140' cy='90' rx='16' ry='12'/><circle cx='140' cy='90' r='4'/>\
+<ellipse cx='172' cy='92' rx='12' ry='9'/><circle cx='172' cy='92' r='3'/>\
+<!-- Dholak -->\
+<path d='M190,74 C210,70 210,98 190,94 Z'/>\
+<line x1='192' y1='76' x2='188' y2='92'/><line x1='200' y1='75' x2='196' y2='93'/>\
+</g></svg>");
+  background-repeat:no-repeat; background-size:contain; background-position:bottom right;
+}
+
+/* Typography – all white as requested */
 .center{text-align:center}
-.hdg,.hdg2{ font-family:"Bodoni Moda","Playfair Display",serif; color:var(--gold); }
+.hdg,.hdg2{ font-family:"Bodoni Moda","Playfair Display",serif; color:var(--white); }
 .hdg{ font-weight:700; font-size:clamp(22px,3.2vmin,30px); letter-spacing:.02em; margin:.2em 0 .7em; }
 .hdg2{ font-weight:700; text-transform:uppercase; letter-spacing:.14em; font-size:clamp(20px,3vmin,28px); margin:.4em 0 .1em; }
-.sub{ font-family:"Bodoni Moda","Playfair Display",serif; font-weight:600; color:var(--gold); font-size:clamp(16px,2.2vmin,20px); }
-p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:var(--cream); }
-.rule{ width:min(200px,40%); height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:16px auto; opacity:.95; }
+p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:var(--white); }
+.rule{ width:min(200px,40%); height:2px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent); margin:16px auto; opacity:.95; }
 
 /* Bottom tabs */
 .nav-tabs{
   position:fixed; bottom:0; left:0; width:100%;
   display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
-  background: rgba(255,184,70,.92);
-  border-top:2px solid var(--gold);
+  background: rgba(255,184,70,.85);
+  border-top:2px solid rgba(255,255,255,.7);
   padding:12px 10px; z-index:10; backdrop-filter: blur(4px);
 }
 .nav-tabs a{
-  text-decoration:none; color:#7a5809;
+  text-decoration:none; color:#442d00;
   font-family:"Bodoni Moda","Playfair Display",serif; font-weight:700; letter-spacing:.04em;
   font-size:clamp(14px,2.2vmin,18px);
   padding:6px 10px; border-bottom:2px solid transparent; transition:all .25s ease;
 }
-.nav-tabs a:hover, .nav-tabs a.active{ color:#573e06; border-bottom:2px solid #573e06; }
-@media print{ .nav-tabs{display:none} .page{padding:0} }
+.nav-tabs a:hover, .nav-tabs a.active{ color:#241700; border-bottom:2px solid #241700; }
+
+@media (max-width:520px){
+  .flower{ width:34px; height:34px; }
+  .motifs{ width:180px; }
+}
+@media print{
+  .nav-tabs,.flowers,.vignette{display:none}
+  .page{padding:0}
+}
 </style>
 </head>
 <body>
 
-<div class="rays"></div>
-<div class="mandalas"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- Falling marigold flowers -->
+<div class="flowers" id="flowers" aria-hidden="true"></div>
 
 <main class="page">
   <section class="card">
     <div class="panel center">
 
-      <p class="sub">kindly RSVP by 8th of December 2025</p>
+      <div class="motifs" aria-hidden="true"></div>
 
+      <!-- ALL TEXT BELOW IS WHITE (DO NOT EDIT WORDING) -->
+      <p>kindly RSVP by 8th of December 2025</p>
       <h2 class="hdg">In humble gratitude to Allah ﷻ for His countless favours,</h2>
-      <p class="sub">Alhaj Mr Asif Ali Sayed &amp; Mrs Wahida Sayed</p>
+      <p class="hdg">Alhaj Mr Asif Ali Sayed &amp; Mrs Wahida Sayed</p>
 
       <div class="rule"></div>
 
@@ -168,16 +221,17 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 
       <div class="rule"></div>
 
-      <p class="sub">In'sha Allah on: 23rd of December 2025 ~ 2nd of Rajab 1447 AH<br/>from 06:30 pm onwards</p>
-      <p class="sub">At ~ The Club House, Raheja Vistas Premiere, Mohammedwadi, Pune: 411 060</p>
+      <p>In'sha Allah on: 23rd of December 2025 ~ 2nd of Rajab 1447 AH<br/>from 06:30 pm onwards</p>
+      <p>At ~ The Club House, Raheja Vistas Premiere, Mohammedwadi, Pune: 411 060</p>
 
       <p>Your esteemed presence will honour the family and add joy to the celebration.</p>
-      <p class="sub">kindly RSVP by 8th of December 2025</p>
-
+      <p>kindly RSVP by 8th of December 2025</p>
+      <!-- END TEXT BLOCK -->
     </div>
   </section>
 </main>
 
+<!-- Bottom navigation -->
 <nav class="nav-tabs">
   <a href="index.html">Welcome</a>
   <a href="mehndi.html">Mehndi</a>
@@ -186,6 +240,35 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
   <a href="walima.html">Walima</a>
   <a href="rsvp.html">RSVP</a>
 </nav>
+
+<script>
+/* spawn falling marigold flowers */
+const wrap = document.getElementById('flowers');
+const COUNT = 22; // keep subtle
+function addFlower(){
+  const f = document.createElement('div');
+  f.className = 'flower';
+  f.dataset.variant = Math.random() < 0.5 ? 'a' : 'b';
+  const startX = Math.random()*100; // vw
+  f.style.left = startX + 'vw';
+  f.style.top = (-10 - Math.random()*20) + 'vh';
+  const dur = 12 + Math.random()*10; // seconds
+  const delay = Math.random()*6;     // seconds
+  f.style.animationDuration = dur + 's';
+  f.style.animationDelay = delay + 's';
+  f.style.opacity = 0.45 + Math.random()*0.25;
+  wrap.appendChild(f);
+  // cleanup after cycle
+  setTimeout(()=> f.remove(), (dur+delay)*1000 + 500);
+}
+function loop(){
+  // maintain a field of flowers
+  const current = wrap.querySelectorAll('.flower').length;
+  for(let i=current; i<COUNT; i++) addFlower();
+}
+loop();
+setInterval(loop, 1200);
+</script>
 
 </body>
 </html>
