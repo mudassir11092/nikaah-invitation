@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Mudassir ♥ Farhana — Nikkah Invitation</title>
+<title>Mudassir ♥ Farhana — Wedding Invitation</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -16,8 +16,6 @@
   --paper:#0a1025;
   --ivory:#fffaf0;
 }
-
-/* Base */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -31,40 +29,29 @@ body{
   line-height:1.42;
   overflow-x:hidden;
 }
-
-/* Back layers */
-.stars{
-  position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden;
-}
-.star{
-  position:absolute; background:#fff; border-radius:50%;
-  opacity:.8; animation: fall linear infinite, twinkle 2s infinite alternate;
-}
-@keyframes fall{0%{transform:translate(0,0) rotate(0deg);opacity:.9;}
-100%{transform:translate(60px,100vh) rotate(360deg);opacity:0;}}
+/* Stars */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+.star{position:absolute;background:#fff;border-radius:50%;opacity:.8;animation:fall linear infinite,twinkle 2s infinite alternate;}
+@keyframes fall{0%{transform:translate(0,0) rotate(0deg);opacity:.9;}100%{transform:translate(60px,100vh) rotate(360deg);opacity:0;}}
 @keyframes twinkle{0%{opacity:.35}100%{opacity:.95}}
-
-/* GOLD lattice behind frame */
+/* Gold Lattice */
 .lattice{
-  position:fixed; inset:0; pointer-events:none; z-index:2;
+  position:fixed;inset:0;pointer-events:none;z-index:2;
   opacity:0.32;
   background-image:url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><g fill='none' stroke='%23d7b56d' stroke-width='1.2'><circle cx='40' cy='0' r='40'/><circle cx='40' cy='80' r='40'/><circle cx='0' cy='40' r='40'/><circle cx='80' cy='40' r='40'/></g></svg>");
   background-size:80px 80px;
   filter:drop-shadow(0 0 8px rgba(215,181,109,.25));
 }
-
-/* Center frame */
+/* Frame */
 .page{
   min-height:100%;
   display:grid;
   place-items:center;
-  padding:6vmin 3vmin 80px; /* bottom padding for nav bar */
+  padding:6vmin 3vmin 80px;
   position:relative;
   z-index:3;
 }
-
-/* Ornate frame */
 .card{
   position:relative;
   max-width:min(900px,92vw);
@@ -80,57 +67,38 @@ body{
 }
 .card::before{
   content:"";
-  position:absolute; inset:-28px; border-radius:30px; pointer-events:none;
+  position:absolute;inset:-28px;border-radius:30px;pointer-events:none;
   background:url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23e9d49b'/><stop offset='1' stop-color='%23caa65a'/></linearGradient></defs><g fill='url(%23g)'><path d='M0,70 Q58,58 70,0 L95,0 Q82,78 0,95 Z'/><path d='M200,130 Q142,142 130,200 L105,200 Q118,122 200,105 Z'/><path d='M130,0 Q142,58 200,70 L200,95 Q122,82 105,0 Z'/><path d='M70,200 Q58,142 0,130 L0,105 Q78,118 95,200 Z'/></g></svg>") center/52% 52% no-repeat;
   filter:drop-shadow(0 10px 16px rgba(0,0,0,.25));
 }
-
-/* Inner arched panel */
 .panel{
   position:relative;
-  background:radial-gradient(140% 70% at 50% 0%, rgba(255,255,255,.06), transparent 60%),var(--navy-2);
+  background:radial-gradient(140% 70% at 50% 0%,rgba(255,255,255,.06),transparent 60%),var(--navy-2);
   border:2px solid var(--gold);
   border-radius:220px/42px 42px 28px 28px;
   padding:min(8vmin,72px) min(7vmin,64px);
   overflow:hidden;
 }
-
-/* Ivory lattice inside panel */
 .panel::after{
-  content:"";
-  position:absolute; inset:clamp(14px,4vmin,28px);
-  z-index:0; opacity:.18;
-  background:
-    repeating-linear-gradient(45deg,var(--ivory) 0 1px,transparent 1px 26px),
-    repeating-linear-gradient(-45deg,var(--ivory) 0 1px,transparent 1px 26px);
-  filter:drop-shadow(0 0 4px rgba(255,250,240,.08));
-  border-radius:inherit;
+  content:"";position:absolute;inset:clamp(14px,4vmin,28px);z-index:0;opacity:.18;
+  background:repeating-linear-gradient(45deg,var(--ivory) 0 1px,transparent 1px 26px),repeating-linear-gradient(-45deg,var(--ivory) 0 1px,transparent 1px 26px);
+  filter:drop-shadow(0 0 4px rgba(255,250,240,.08));border-radius:inherit;
 }
 .panel>*{position:relative;z-index:1;}
-
-/* Typography */
 .center{text-align:center}
-.block{font-size:clamp(16px,2.25vmin,22px);margin:1.15em auto;max-width:85%;}
-.highlight{
-  display:block;line-height:1.35;
-  background:linear-gradient(180deg,var(--gold-hi),var(--gold));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-}
-.parents{font-weight:700;font-size:clamp(18px,2.6vmin,26px);margin:1.2em auto .8em;}
-.note{margin:1.1em auto 1.4em;max-width:90%;}
 .names{
   font-family:"Playfair Display",serif;font-weight:700;
-  font-size:clamp(32px,5.6vmin,60px);line-height:1.1;margin:.2em 0 .2em;
+  font-size:clamp(32px,5.6vmin,60px);line-height:1.1;margin:.2em 0;
   background:linear-gradient(180deg,var(--gold-hi),var(--gold));
   -webkit-background-clip:text;background-clip:text;color:transparent;
-  text-shadow:0 0 1px rgba(0,0,0,.25);
 }
-.and{text-align:center;font-family:"Playfair Display",serif;font-weight:700;
-  font-size:clamp(18px,3.6vmin,36px);letter-spacing:.08em;color:var(--gold-hi);margin:.1em 0 .25em;}
-.footer{margin-top:min(5.5vmin,44px);font-size:clamp(16px,2.25vmin,22px);}
+.block{font-size:clamp(16px,2.25vmin,22px);margin:1.15em auto;max-width:85%;}
+.highlight{display:block;background:linear-gradient(180deg,var(--gold-hi),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.footer{margin-top:2em;font-size:clamp(16px,2.25vmin,22px);}
+@media print{.stars,.lattice,.nav-tabs{display:none;}}
 
-/* Bottom Navigation Tabs */
+/* Bottom Nav */
 .nav-tabs{
   position:fixed;bottom:0;left:0;width:100%;
   display:flex;justify-content:center;gap:22px;
@@ -141,27 +109,18 @@ body{
   backdrop-filter:blur(4px);
 }
 .nav-tabs a{
-  text-decoration:none;
-  color:var(--gold);
-  font-family:"Playfair Display",serif;
-  font-weight:600;
-  letter-spacing:0.05em;
+  text-decoration:none;color:var(--gold);
+  font-family:"Playfair Display",serif;font-weight:600;
   font-size:clamp(14px,2.2vmin,18px);
+  letter-spacing:.05em;
   padding:6px 10px;
   border-bottom:2px solid transparent;
-  transition:all 0.3s ease;
+  transition:all .3s ease;
 }
 .nav-tabs a:hover,
 .nav-tabs a.active{
   color:var(--gold-hi);
   border-bottom:2px solid var(--gold-hi);
-}
-
-@media print{
-  body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .stars,.lattice,.nav-tabs{display:none;}
-  .page{padding:0;}
-  .card{box-shadow:none;}
 }
 </style>
 </head>
@@ -173,55 +132,31 @@ body{
 <main class="page">
   <section class="card">
     <div class="panel center">
-      <p class="block">
-        with immense blessings of his adoring grandparents
-        <span class="highlight">Alhaj Hazrat Sayed Mehboob Ali Shah (RH),</span>
-        <span class="highlight">Hajiani Sayeda Khairunnisa,</span>
-        <span class="highlight">Alhaj Ghoolam Mohammed Khan and</span>
-        <span class="highlight">Hajiani Ayesha Bibi Khan</span>
-      </p>
-
-      <p class="block">
-        In the esteemed presence of his honorable uncles
-        <span class="highlight">Hazrat Sayed Mohsin Ali Shah, Hazrat Sayed Hafiz Ali Shah,</span>
-        <span class="highlight">&amp; Alhaj Sayed Maqsood Ahmed</span>
-      </p>
-
-      <p class="parents">
-        <span class="highlight">Alhaj Mr Asif Ali Sayed &amp; Mrs Wahida Sayed</span>
-      </p>
-
-      <p class="note">
-        solicit your blessings and request your presence to grace the
-        auspicious occasion of the Wedding events of their beloved son
-      </p>
-
+      <h1 class="names">Wedding Invitation</h1>
+      <p class="block">With the blessings of Allah, our beloved families, and cherished friends,</p>
+      <p class="block"><span class="highlight">We joyfully invite you to the wedding celebrations of</span></p>
       <h1 class="names">Hafiz Sayed Mudassir Ali</h1>
-      <div class="and">with</div>
+      <div class="block">&amp;</div>
       <h1 class="names">Sayeda Farhana</h1>
-
-      <p class="footer">
-        <span class="highlight">
-          d/o. Alhaj Mr Abrar Niyamutallah Sayed<br/>
-          &amp; Mrs. Fatima Abrar Sayed
-        </span>
-      </p>
+      <p class="block">We request your gracious presence and prayers as we begin our new journey together.</p>
+      <p class="footer"><span class="highlight">December 2025 — Pune, India</span></p>
     </div>
   </section>
 </main>
 
-<!-- Bottom navigation bar -->
+<!-- Bottom Tabs -->
 <nav class="nav-tabs">
+  <a href="index.html" class="active">Welcome</a>
   <a href="mehndi.html">Mehndi</a>
   <a href="haldi.html">Haldi</a>
-  <a href="index.html" class="active">Nikkah</a>
+  <a href="nikkah.html">Nikkah</a>
   <a href="walima.html">Walima</a>
   <a href="rsvp.html">RSVP</a>
 </nav>
 
 <script>
-// Stars animation
-const starsContainer = document.querySelector('.stars');
+// stars
+const starsContainer=document.querySelector('.stars');
 for(let i=0;i<70;i++){
   const s=document.createElement('div');
   s.className='star';
@@ -233,6 +168,5 @@ for(let i=0;i<70;i++){
   starsContainer.appendChild(s);
 }
 </script>
-
 </body>
 </html>
