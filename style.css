@@ -1,0 +1,109 @@
+body {
+  background-color: #f6f9fc;
+  font-family: "Open Sans", sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #222;
+}
+
+.invitation {
+  max-width: 600px;
+  margin: 40px auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.border {
+  width: 100%;
+}
+
+.content {
+  padding: 20px 30px 40px;
+}
+
+.arabic {
+  font-family: "Playfair Display", serif;
+  font-size: 20px;
+  color: #00224f;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #444;
+}
+
+.intro {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #444;
+}
+
+.names {
+  font-family: "Great Vibes", cursive;
+  font-size: 36px;
+  color: #3d5673;
+  margin: 30px 0 20px;
+}
+
+.date-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 25px 0;
+  padding: 10px 0;
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #bbb;
+}
+
+.date-box .side {
+  width: 30%;
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  color: #2f3d4a;
+}
+
+.date-box .middle {
+  width: 40%;
+}
+
+.date-box .month {
+  font-family: "Playfair Display", serif;
+  font-size: 20px;
+}
+
+.date-box .day {
+  font-family: "Playfair Display", serif;
+  font-size: 40px;
+  font-weight: 600;
+  color: #2a3d5f;
+}
+
+.date-box .year {
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.venue {
+  margin-top: 25px;
+  font-size: 15px;
+  color: #222;
+  line-height: 1.6;
+}
+
+.venue strong {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1a2433;
+}
+
+@media (max-width: 600px) {
+  .names { font-size: 30px; }
+  .date-box .day { font-size: 34px; }
+}
