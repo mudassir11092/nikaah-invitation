@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Wedding Invitation – Hafiz Sayed Mudassir Ali with Sayeda Farhana</title>
 
-<!-- Elegant serif stack -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -17,6 +16,7 @@
   --paper:#0a1025;
 }
 
+/* base */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -28,17 +28,42 @@ body{
   color:var(--gold);
   font-family:"Cormorant Garamond", serif;
   line-height:1.42;
+  overflow-x:hidden;
 }
 
-/* Center the card */
+/* layers */
+.stars{
+  position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden;
+}
+.lattice{
+  position:fixed; inset:0; pointer-events:none; z-index:2;
+  opacity:.22; /* overall strength of lattice */
+  /* Tileable Arabic/Islamic-inspired lattice (overlapping circles) */
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'>\
+<g fill='none' stroke='%23e7c986' stroke-opacity='.9' stroke-width='1'>\
+<circle cx='40' cy='0' r='40'/>\
+<circle cx='40' cy='80' r='40'/>\
+<circle cx='0' cy='40' r='40'/>\
+<circle cx='80' cy='40' r='40'/>\
+</g></svg>");
+  background-size: 80px 80px;
+  background-position: center;
+  /* A faint glow to mimic gilt ink on navy */
+  filter: drop-shadow(0 0 6px rgba(231,201,134,.08));
+}
+
+/* center page/frame sits above lattice */
 .page{
   min-height:100%;
   display:grid;
   place-items:center;
   padding:5vmin 3vmin;
+  position:relative;
+  z-index:3;
 }
 
-/* Outer frame (double gold rim) */
+/* frame + ornate corners */
 .card{
   position:relative;
   max-width:min(900px,92vw);
@@ -52,12 +77,9 @@ body{
     0 0 0 16px var(--gold) inset,
     0 22px 50px rgba(0,0,0,.45);
 }
-
-/* Ornate corner embellishments (SVG) */
 .card::before{
   content:"";
-  position:absolute;
-  inset:-28px;
+  position:absolute; inset:-28px; border-radius:30px; pointer-events:none;
   background:
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 200 200'>\
@@ -71,87 +93,75 @@ body{
 <path d='M70,200 Q58,142 0,130 L0,105 Q78,118 95,200 Z'/>\
 </g></svg>") center/52% 52% no-repeat;
   filter: drop-shadow(0 10px 16px rgba(0,0,0,.25));
-  border-radius:30px;
-  pointer-events:none;
 }
 
-/* Inner arched panel */
+/* inner arched panel */
 .panel{
   position:relative;
   background:
     radial-gradient(140% 70% at 50% 0%, rgba(255,255,255,.06), transparent 60%),
     var(--navy-2);
   border:2px solid var(--gold);
-  border-radius:220px/42px 42px 28px 28px; /* arch feel */
+  border-radius:220px/42px 42px 28px 28px;
   padding:min(8vmin,72px) min(7vmin,64px);
 }
 
-/* Typography */
-.center{ text-align:center; }
-
+/* typography */
+.center{text-align:center}
 .block{
   font-size: clamp(16px, 2.25vmin, 22px);
   margin: 1.15em auto;
   max-width: 85%;
 }
 .highlight{
-  display:block;
-  text-transform:none;
-  letter-spacing:.2px;
-  line-height:1.35;
+  display:block; line-height:1.35;
   background:linear-gradient(180deg,var(--gold-hi),var(--gold));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
 }
-.parents{
-  font-weight:700;
-  font-size: clamp(18px, 2.6vmin, 26px);
-  margin: 1.2em auto .8em;
-}
-
-.note{
-  margin: 1.1em auto 1.4em;
-  max-width: 90%;
-}
-
-/* Names */
+.parents{ font-weight:700; font-size: clamp(18px, 2.6vmin, 26px); margin:1.2em auto .8em; }
+.note{ margin:1.1em auto 1.4em; max-width:90%; }
 .names{
-  font-family:"Playfair Display", serif;
-  font-weight:700;
-  font-size: clamp(32px, 5.6vmin, 60px);
-  line-height:1.1;
-  margin:.2em 0 .2em;
-  text-align:center;
+  font-family:"Playfair Display", serif; font-weight:700;
+  font-size: clamp(32px, 5.6vmin, 60px); line-height:1.1; margin:.2em 0 .2em;
   background:linear-gradient(180deg,var(--gold-hi),var(--gold));
   -webkit-background-clip:text; background-clip:text; color:transparent;
   text-shadow:0 0 1px rgba(0,0,0,.25);
 }
 .and{
-  text-align:center;
-  font-family:"Playfair Display", serif;
-  font-weight:700;
-  font-size: clamp(18px, 3.6vmin, 36px);
-  letter-spacing:.08em;
-  color:var(--gold-hi);
+  text-align:center; font-family:"Playfair Display", serif; font-weight:700;
+  font-size: clamp(18px, 3.6vmin, 36px); letter-spacing:.08em; color:var(--gold-hi);
   margin:.1em 0 .25em;
 }
+.footer{ margin-top:min(5.5vmin,44px); font-size: clamp(16px, 2.25vmin, 22px); }
 
-/* Bottom line */
-.footer{
-  margin-top:min(5.5vmin,44px);
-  font-size: clamp(16px, 2.25vmin, 22px);
-}
-
-/* Print */
+/* print */
 @media print{
   body{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .stars,.lattice{ display:none; }
   .page{ padding:0; }
   .card{ box-shadow:none; }
 }
+
+/* stars animation (unchanged) */
+.star{
+  position:absolute; background:#fff; border-radius:50%;
+  opacity:.8; animation: fall linear infinite, twinkle 2s infinite alternate;
+}
+@keyframes fall{
+  0%{ transform: translate(0,0) rotate(0deg); opacity:.9; }
+  100%{ transform: translate(60px, 100vh) rotate(360deg); opacity:0; }
+}
+@keyframes twinkle{ 0%{opacity:.35} 100%{opacity:.95} }
 </style>
 </head>
 <body>
+
+  <!-- back layer -->
+  <div class="stars" aria-hidden="true"></div>
+  <!-- new lattice layer (between stars and frame) -->
+  <div class="lattice" aria-hidden="true"></div>
+
+  <!-- card -->
   <main class="page">
     <section class="card">
       <div class="panel center">
@@ -193,5 +203,21 @@ body{
       </div>
     </section>
   </main>
+
+<script>
+  // create stars
+  const starsContainer = document.querySelector('.stars');
+  const numStars = 70;
+  for (let i = 0; i < numStars; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random()*100 + 'vw';
+    s.style.top = Math.random()*100 + 'vh';
+    s.style.width = s.style.height = 2 + Math.random()*3 + 'px';
+    s.style.animationDuration = 4 + Math.random()*6 + 's';
+    s.style.opacity = 0.5 + Math.random()*0.5;
+    starsContainer.appendChild(s);
+  }
+</script>
 </body>
 </html>
