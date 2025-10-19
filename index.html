@@ -60,3 +60,19 @@
   </script>
 </body>
 </html>
+<div class="stars"></div>
+
+<script>
+  const starsContainer = document.querySelector('.stars');
+  const numStars = 60;
+
+  for (let i = 0; i < numStars; i++) {
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.left = Math.random() * 100 + 'vw';
+    star.style.top = Math.random() * 100 + 'vh';
+    star.style.width = star.style.height = 2 + Math.random() * 3 + 'px';
+    star.style.animationDuration = 5 + Math.random() * 5 + 's';
+    starsContainer.appendChild(star);
+  }
+</script>
