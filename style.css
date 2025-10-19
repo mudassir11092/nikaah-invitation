@@ -1,149 +1,221 @@
-/* Body and background */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: "Open Sans", sans-serif;
-  background: #6a0dad; /* romantic deep purple */
-  overflow-x: hidden;
-  position: relative;
-  color: #fff;
-  text-align: center;
+/* ----------------------------------
+   THEME
+---------------------------------- */
+:root{
+  --navy:#0d1a3a;       /* deep card color */
+  --navy-2:#0a1430;     /* inner panel shade */
+  --paper:#0a1025;      /* page background */
+  --gold:#d7b56d;       /* primary gold */
+  --gold-hi:#e7c986;    /* highlight gold */
+  --white:#ffffff;
 }
 
-/* Stars container */
-.stars {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
+/* ----------------------------------
+   BASE / PAGE
+---------------------------------- */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  font-family:"Cormorant Garamond", serif;
+  color:var(--gold);
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(215,181,109,.08), transparent 60%),
+    radial-gradient(1200px 600px at 50% 110%, rgba(215,181,109,.08), transparent 60%),
+    var(--paper);
+  overflow-x:hidden;
+  text-align:center;
 }
 
-/* Individual stars */
-.star {
-  position: absolute;
-  background-color: #fff;
-  border-radius: 50%;
-  opacity: 0.8;
+.page{
+  min-height:100%;
+  display:grid;
+  place-items:center;
+  padding:5vmin 3vmin;
+  position:relative;
+  z-index:2; /* above stars */
+}
+
+/* ----------------------------------
+   STARS (your effect, kept)
+---------------------------------- */
+.stars{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  overflow:hidden;
+}
+.star{
+  position:absolute;
+  background-color:var(--white);
+  border-radius:50%;
+  opacity:.8;
   animation: fall linear infinite, twinkle 2s infinite alternate;
 }
-
-/* Falling animation with slight diagonal */
-@keyframes fall {
-  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.8; }
-  100% { transform: translate(50px, 100vh) rotate(360deg); opacity: 0; }
+@keyframes fall{
+  0%   { transform: translate(0, 0) rotate(0deg);   opacity:.9; }
+  100% { transform: translate(60px, 100vh) rotate(360deg); opacity:0; }
+}
+@keyframes twinkle{
+  0% { opacity:.35; }
+  100% { opacity:.95; }
 }
 
-/* Twinkle effect */
-@keyframes twinkle {
-  0% { opacity: 0.3; }
-  100% { opacity: 0.9; }
+/* ----------------------------------
+   ORNATE FRAME + ARCH PANEL
+---------------------------------- */
+.frame{
+  position:relative;
+  max-width:min(860px, 92vw);
+  width:100%;
+  background:var(--navy);
+  border-radius:22px;
+  padding:18px;
+  /* double gold rim */
+  box-shadow:
+    0 0 0 2px var(--gold) inset,
+    0 0 0 14px var(--navy) inset,
+    0 0 0 16px var(--gold) inset,
+    0 22px 50px rgba(0,0,0,.45);
+}
+.frame::before{
+  /* corner ornaments via inline SVG */
+  content:"";
+  position:absolute;
+  inset:-28px;
+  background:
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 200 200'>\
+<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>\
+<stop offset='0' stop-color='%23e9d49b'/><stop offset='1' stop-color='%23caa65a'/>\
+</linearGradient></defs>\
+<g fill='url(%23g)' opacity='0.9'>\
+<path d='M0,70 Q58,58 70,0 L95,0 Q82,78 0,95 Z'/>\
+<path d='M200,130 Q142,142 130,200 L105,200 Q118,122 200,105 Z'/>\
+<path d='M130,0 Q142,58 200,70 L200,95 Q122,82 105,0 Z'/>\
+<path d='M70,200 Q58,142 0,130 L0,105 Q78,118 95,200 Z'/>\
+</g></svg>") center/52% 52% no-repeat;
+  pointer-events:none;
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.25));
+  border-radius:28px;
 }
 
-/* Invitation card */
-.invitation {
-  max-width: 600px;
-  margin: 40px auto;
-  background-color: rgba(255,255,255,0.95); /* slightly transparent */
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  overflow: hidden;
-  position: relative;
-  z-index: 2; /* stay above stars */
+.inner{
+  position:relative;
+  background:
+    radial-gradient(140% 70% at 50% 0%, rgba(255,255,255,.06), transparent 60%),
+    var(--navy-2);
+  border-radius:200px/40px 40px 28px 28px; /* arched top */
+  padding: min(8vmin,72px) min(7vmin,64px);
+  border:2px solid var(--gold);
 }
 
-/* Borders */
-.border {
-  width: 100%;
+/* ----------------------------------
+   YOUR ORIGINAL INVITATION BOX (re-styled to gold theme)
+---------------------------------- */
+.invitation{
+  margin:0 auto;
+  background:transparent;
+  border-radius:10px;
+  overflow:hidden;
+}
+.border{
+  width:100%;
+  opacity:.9; /* if images are missing, this has no effect */
+}
+.content{ padding: 0 30px 10px; }
+
+/* Typography (golden look) */
+.arabic{
+  font-family:"Playfair Display", serif;
+  font-size: clamp(18px, 2.2vmin, 22px);
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.subtitle,
+.intro,
+.venue,
+.date-box .side,
+.date-box .month,
+.date-box .year{
+  color: var(--gold);
+}
+.subtitle{
+  text-transform:uppercase;
+  font-weight:700;
+  letter-spacing:.08em;
+  opacity:.95;
+}
+.intro{ margin-top:10px; font-size: clamp(14px, 1.9vmin, 16px); }
+
+/* Names keep your Great Vibes font for flourish */
+.names{
+  font-family:"Great Vibes", cursive;
+  font-weight:400;
+  font-size: clamp(32px, 5.2vmin, 56px);
+  line-height:1.1;
+  margin: 28px 0 18px;
+  background: linear-gradient(180deg, var(--gold-hi), var(--gold));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow: 0 0 1px rgba(0,0,0,.25);
 }
 
-/* Invitation content */
-.content {
-  padding: 20px 30px 40px;
+/* Date box — refined separators */
+.date-box{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin: 26px auto;
+  padding: 12px 0;
+  border-top: 1px solid rgba(231,201,134,.5);
+  border-bottom: 1px solid rgba(231,201,134,.5);
+  max-width: 520px;
+}
+.date-box .side{
+  width:30%;
+  font-family:"Playfair Display", serif;
+  font-size: clamp(16px, 2.2vmin, 18px);
+}
+.date-box .middle{ width:40%; }
+.date-box .month{
+  font-family:"Playfair Display", serif;
+  font-weight:600;
+  letter-spacing:.02em;
+}
+.date-box .day{
+  font-family:"Playfair Display", serif;
+  font-size: clamp(34px, 5.4vmin, 48px);
+  font-weight:700;
+  color: var(--gold-hi);
+  line-height:1;
+}
+.date-box .year{ font-size: clamp(16px, 2.1vmin, 18px); }
+
+/* Venue */
+.venue{
+  margin-top:24px;
+  font-size: clamp(14px, 1.9vmin, 16px);
+  line-height:1.65;
+}
+.venue strong{
+  font-weight:700;
+  font-size: clamp(15px, 2.1vmin, 18px);
+  color: var(--gold-hi);
 }
 
-.arabic {
-  font-family: "Playfair Display", serif;
-  font-size: 20px;
-  color: #2a003d;
-  margin-bottom: 5px;
+/* Small screens */
+@media (max-width: 600px){
+  .content{ padding: 0 18px 8px; }
 }
 
-.subtitle {
-  text-transform: uppercase;
-  font-weight: bold;
-  letter-spacing: 1px;
-  color: #2a003d;
-}
-
-.intro {
-  margin-top: 10px;
-  font-size: 15px;
-  color: #2a003d;
-}
-
-.names {
-  font-family: "Great Vibes", cursive;
-  font-size: 36px;
-  color: #4c0099;
-  margin: 30px 0 20px;
-}
-
-.date-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 25px 0;
-  padding: 10px 0;
-  border-top: 1px solid #bbb;
-  border-bottom: 1px solid #bbb;
-}
-
-.date-box .side {
-  width: 30%;
-  font-family: "Playfair Display", serif;
-  font-size: 18px;
-  color: #2a003d;
-}
-
-.date-box .middle {
-  width: 40%;
-}
-
-.date-box .month {
-  font-family: "Playfair Display", serif;
-  font-size: 20px;
-}
-
-.date-box .day {
-  font-family: "Playfair Display", serif;
-  font-size: 40px;
-  font-weight: 600;
-  color: #4c0099;
-}
-
-.date-box .year {
-  font-size: 18px;
-  margin-top: 2px;
-}
-
-.venue {
-  margin-top: 25px;
-  font-size: 15px;
-  color: #2a003d;
-  line-height: 1.6;
-}
-
-.venue strong {
-  font-weight: 600;
-  font-size: 16px;
-  color: #2a003d;
-}
-
-@media (max-width: 600px) {
-  .names { font-size: 30px; }
-  .date-box .day { font-size: 34px; }
+/* Print */
+@media print{
+  body{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .stars{ display:none; }
+  .page{ padding:0; }
+  .frame{ box-shadow:none; }
 }
