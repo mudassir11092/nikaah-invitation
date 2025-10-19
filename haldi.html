@@ -1,1 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Haldi Ceremony — Zauq-e-Zareen</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600;700&family=Playfair+Display:wght@400;600;700&family=Scheherazade+New:wght@400;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --marigold:#FFD54F;
+  --orange:#FFA726;
+  --cream:#FFF8E1;
+  --gold:#E6B31E;
+  --ink:rgba(0,0,0,.22);
+}
+
+/* Base */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:
+    radial-gradient(1400px 700px at 50% -10%, rgba(230,179,30,.12), transparent 60%),
+    radial-gradient(1400px 700px at 50% 110%, rgba(255,167,38,.10), transparent 60%),
+    var(--marigold);
+  color:var(--cream);
+  font-family:"Source Sans 3",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Open Sans",sans-serif;
+  line-height:1.48;
+  overflow-x:hidden;
+}
+
+/* Sunburst rays (subtle motion) */
+.rays{
+  position:fixed; inset:-10% -10% -10% -10%; z-index:0; pointer-events:none;
+  background:
+    conic-gradient(from 0deg at 50% 30%, rgba(230,179,30,.25), transparent 20%, rgba(230,179,30,.18), transparent 40%, rgba(230,179,30,.25), transparent 60%, rgba(230,179,30,.18), transparent 80%, rgba(230,179,30,.25));
+  animation: spin 80s linear infinite;
+  filter: blur(1px);
+  opacity:.25;
+}
+@keyframes spin{ to{ transform: rotate(360deg) } }
+
+/* Page & Ornate border (gold leaf illusion) */
+.page{
+  min-height:100%;
+  display:grid;
+  place-items:center;
+  padding:6vmin 3vmin 90px;
+  position:relative;
+  z-index:1;
+}
+.page::before{
+  /* Gold leafy edge via layered gradients */
+  content:"";
+  position:fixed; inset:18px; border-radius:18px; pointer-events:none;
+  background:
+    repeating-linear-gradient(135deg, rgba(230,179,30,.18) 0 6px, rgba(255,216,120,.18) 6px 12px),
+    repeating-linear-gradient(-135deg, rgba(230,179,30,.16) 0 6px, rgba(255,216,120,.16) 6px 12px);
+  box-shadow:
+    0 0 0 2px var(--gold) inset,
+    0 0 0 16px rgba(0,0,0,.10) inset,
+    0 0 0 18px var(--gold) inset;
+}
+
+/* Mandala outlines (faint, in gold) */
+.mandalas{
+  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.22; filter:drop-shadow(0 4px 6px rgba(0,0,0,.15));
+  background:
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'>\
+<g fill='none' stroke='%23E6B31E' stroke-width='1.6' stroke-opacity='.8'>\
+<circle cx='200' cy='260' r='140'/><circle cx='600' cy='520' r='160'/>\
+<circle cx='520' cy='220' r='90'/><circle cx='260' cy='560' r='110'/>\
+</g></svg>") center/cover no-repeat;
+}
+
+/* Card */
+.card{
+  position:relative;
+  max-width:min(920px,94vw);
+  width:100%;
+  border-radius:22px;
+  padding:18px;
+  background: linear-gradient(180deg, rgba(255,167,38,.12), rgba(255,213,79,.10)) , rgba(255,213,79,.35);
+  box-shadow:
+    0 0 0 2px var(--gold) inset,
+    0 0 0 14px rgba(255,184,70,.35) inset,
+    0 0 0 16px var(--gold) inset,
+    0 24px 50px rgba(0,0,0,.25);
+  overflow:hidden;
+}
+
+/* Inner panel */
+.panel{
+  position:relative;
+  background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
+  border:2px solid var(--gold);
+  border-radius:200px/48px 48px 28px 28px;
+  padding:min(8vmin,72px) min(7vmin,64px);
+  overflow:hidden;
+}
+/* Faint floral vine overlay inside panel */
+.panel::after{
+  content:"";
+  position:absolute; inset:clamp(14px,4vmin,28px); border-radius:inherit; z-index:0; opacity:.12;
+  background:
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400'>\
+<g fill='none' stroke='%23E6B31E' stroke-width='1.5'>\
+<path d='M40,360 C120,300 200,280 260,220 320,160 360,110 520,70'/>\
+<path d='M80,300 C140,260 200,230 260,180'/>\
+<path d='M380,340 C460,300 520,260 560,220'/>\
+</g></svg>") center/cover no-repeat;
+}
+.panel>*{position:relative;z-index:1}
+
+/* Typography */
+.center{text-align:center}
+.hdg,.hdg2{ font-family:"Bodoni Moda","Playfair Display",serif; color:var(--gold); }
+.hdg{ font-weight:700; font-size:clamp(22px,3.2vmin,30px); letter-spacing:.02em; margin:.2em 0 .7em; }
+.hdg2{ font-weight:700; text-transform:uppercase; letter-spacing:.14em; font-size:clamp(20px,3vmin,28px); margin:.4em 0 .1em; }
+.sub{ font-family:"Bodoni Moda","Playfair Display",serif; font-weight:600; color:var(--gold); font-size:clamp(16px,2.2vmin,20px); }
+p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:var(--cream); }
+.rule{ width:min(200px,40%); height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:16px auto; opacity:.95; }
+
+/* Bottom tabs */
+.nav-tabs{
+  position:fixed; bottom:0; left:0; width:100%;
+  display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
+  background: rgba(255,184,70,.92);
+  border-top:2px solid var(--gold);
+  padding:12px 10px; z-index:10; backdrop-filter: blur(4px);
+}
+.nav-tabs a{
+  text-decoration:none; color:#7a5809;
+  font-family:"Bodoni Moda","Playfair Display",serif; font-weight:700; letter-spacing:.04em;
+  font-size:clamp(14px,2.2vmin,18px);
+  padding:6px 10px; border-bottom:2px solid transparent; transition:all .25s ease;
+}
+.nav-tabs a:hover, .nav-tabs a.active{ color:#573e06; border-bottom:2px solid #573e06; }
+@media print{ .nav-tabs{display:none} .page{padding:0} }
+</style>
+</head>
+<body>
+
+<div class="rays"></div>
+<div class="mandalas"></div>
+
+<main class="page">
+  <section class="card">
+    <div class="panel center">
+
+      <p class="sub">kindly RSVP by 8th of December 2025</p>
+
+      <h2 class="hdg">In humble gratitude to Allah ﷻ for His countless favours,</h2>
+      <p class="sub">Alhaj Mr Asif Ali Sayed &amp; Mrs Wahida Sayed</p>
+
+      <div class="rule"></div>
+
+      <p>Cordially request the honour of your presence to grace the golden and blessed occasion of the</p>
+      <div class="hdg2">Haldi Ceremony</div>
+      <p>in honour of their beloved son</p>
+      <h1 class="hdg" style="margin:.2em 0 .2em;">Hafiz Sayed Mudassir Ali</h1>
+
+      <p>Let us anoint the groom in the glow of haldi, shower him with heartfelt duas for love, harmony, and barakah in his marriage.</p>
+
+      <div class="rule"></div>
+
+      <p class="sub">In'sha Allah on: 23rd of December 2025 ~ 2nd of Rajab 1447 AH<br/>from 06:30 pm onwards</p>
+      <p class="sub">At ~ The Club House, Raheja Vistas Premiere, Mohammedwadi, Pune: 411 060</p>
+
+      <p>Your esteemed presence will honour the family and add joy to the celebration.</p>
+      <p class="sub">kindly RSVP by 8th of December 2025</p>
+
+    </div>
+  </section>
+</main>
+
+<nav class="nav-tabs">
+  <a href="index.html">Welcome</a>
+  <a href="mehndi.html">Mehndi</a>
+  <a href="haldi.html" class="active">Haldi</a>
+  <a href="nikkah.html">Nikkah</a>
+  <a href="walima.html">Walima</a>
+  <a href="rsvp.html">RSVP</a>
+</nav>
+
+</body>
+</html>
 
