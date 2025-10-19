@@ -1,72 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mudassir Ali ♥ Farhana — Nikaah Invitation</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Wedding Invitation – Hafiz Sayed Mudassir Ali with Sayeda Farhana</title>
 
-  <!-- Your fonts + a classy serif for body copy -->
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+<!-- Elegant serif stack -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#0d1a3a;
+  --navy-2:#0a1430;
+  --gold:#d7b56d;
+  --gold-hi:#e7c986;
+  --paper:#0a1025;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(215,181,109,.08), transparent 60%),
+    radial-gradient(1200px 600px at 50% 110%, rgba(215,181,109,.08), transparent 60%),
+    var(--paper);
+  color:var(--gold);
+  font-family:"Cormorant Garamond", serif;
+  line-height:1.42;
+}
+
+/* Center the card */
+.page{
+  min-height:100%;
+  display:grid;
+  place-items:center;
+  padding:5vmin 3vmin;
+}
+
+/* Outer frame (double gold rim) */
+.card{
+  position:relative;
+  max-width:min(900px,92vw);
+  width:100%;
+  background:var(--navy);
+  border-radius:24px;
+  padding:18px;
+  box-shadow:
+    0 0 0 2px var(--gold) inset,
+    0 0 0 14px var(--navy) inset,
+    0 0 0 16px var(--gold) inset,
+    0 22px 50px rgba(0,0,0,.45);
+}
+
+/* Ornate corner embellishments (SVG) */
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-28px;
+  background:
+    url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 200 200'>\
+<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>\
+<stop offset='0' stop-color='%23e9d49b'/><stop offset='1' stop-color='%23caa65a'/>\
+</linearGradient></defs>\
+<g fill='url(%23g)'>\
+<path d='M0,70 Q58,58 70,0 L95,0 Q82,78 0,95 Z'/>\
+<path d='M200,130 Q142,142 130,200 L105,200 Q118,122 200,105 Z'/>\
+<path d='M130,0 Q142,58 200,70 L200,95 Q122,82 105,0 Z'/>\
+<path d='M70,200 Q58,142 0,130 L0,105 Q78,118 95,200 Z'/>\
+</g></svg>") center/52% 52% no-repeat;
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,.25));
+  border-radius:30px;
+  pointer-events:none;
+}
+
+/* Inner arched panel */
+.panel{
+  position:relative;
+  background:
+    radial-gradient(140% 70% at 50% 0%, rgba(255,255,255,.06), transparent 60%),
+    var(--navy-2);
+  border:2px solid var(--gold);
+  border-radius:220px/42px 42px 28px 28px; /* arch feel */
+  padding:min(8vmin,72px) min(7vmin,64px);
+}
+
+/* Typography */
+.center{ text-align:center; }
+
+.block{
+  font-size: clamp(16px, 2.25vmin, 22px);
+  margin: 1.15em auto;
+  max-width: 85%;
+}
+.highlight{
+  display:block;
+  text-transform:none;
+  letter-spacing:.2px;
+  line-height:1.35;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.parents{
+  font-weight:700;
+  font-size: clamp(18px, 2.6vmin, 26px);
+  margin: 1.2em auto .8em;
+}
+
+.note{
+  margin: 1.1em auto 1.4em;
+  max-width: 90%;
+}
+
+/* Names */
+.names{
+  font-family:"Playfair Display", serif;
+  font-weight:700;
+  font-size: clamp(32px, 5.6vmin, 60px);
+  line-height:1.1;
+  margin:.2em 0 .2em;
+  text-align:center;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow:0 0 1px rgba(0,0,0,.25);
+}
+.and{
+  text-align:center;
+  font-family:"Playfair Display", serif;
+  font-weight:700;
+  font-size: clamp(18px, 3.6vmin, 36px);
+  letter-spacing:.08em;
+  color:var(--gold-hi);
+  margin:.1em 0 .25em;
+}
+
+/* Bottom line */
+.footer{
+  margin-top:min(5.5vmin,44px);
+  font-size: clamp(16px, 2.25vmin, 22px);
+}
+
+/* Print */
+@media print{
+  body{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .page{ padding:0; }
+  .card{ box-shadow:none; }
+}
+</style>
 </head>
 <body>
-  <!-- Falling stars -->
-  <div class="stars" aria-hidden="true"></div>
-
-  <!-- Page center -->
   <main class="page">
-    <!-- Ornate outer frame -->
-    <div class="frame">
-      <!-- Arched inner panel; we keep your class 'invitation' for the content box -->
-      <div class="inner invitation">
+    <section class="card">
+      <div class="panel center">
 
-        <!-- keep your optional floral images (hide if files not present) -->
-        <img src="top-flowers.png" alt="Floral top" class="border top">
+        <p class="block">
+          with immense blessings of his adoring grandparents
+          <span class="highlight">Alhaj Hazrat Sayed Mehboob Ali Shah (RH),</span>
+          <span class="highlight">Hajiani Sayeda Khairunnisa,</span>
+          <span class="highlight">Alhaj Ghoolam Mohammed Khan and</span>
+          <span class="highlight">Hajiani Ayesha Bibi Khan</span>
+        </p>
 
-        <div class="content">
-          <p class="arabic">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-          <p class="subtitle">(With Allah’s Blessings)</p>
-          <p class="intro">We invite you to the Nikaah ceremony of</p>
+        <p class="block">
+          In the esteemed presence of his honorable uncles
+          <span class="highlight">Hazrat Sayed Mohsin Ali Shah, Hazrat Sayed Hafiz Ali Shah,</span>
+          <span class="highlight">&amp; Alhaj Sayed Maqsood Ahmed</span>
+        </p>
 
-          <h1 class="names">Hafiz Mudassir Ali Sayed<br>&amp;<br>Sayeda Farhana</h1>
+        <p class="parents">
+          <span class="highlight" style="color:inherit">Alhaj Mr Asif Ali Sayed &amp; Mrs Wahida Sayed</span>
+        </p>
 
-          <div class="date-box">
-            <div class="side">Wednesday</div>
-            <div class="middle">
-              <div class="month">December</div>
-              <div class="day">24</div>
-              <div class="year">2025</div>
-            </div>
-            <div class="side">6 PM</div>
-          </div>
+        <p class="note">
+          solicit your blessings and request your presence to grace the
+          auspicious occasion of the Wedding events of their beloved son
+        </p>
 
-          <div class="venue">
-            <p><strong>Alankar Lawn</strong></p>
-            <p>47 NIMB Road Pune</p>
-            <p>RSVP at Mehbz 085555</p>
-          </div>
-        </div>
+        <h1 class="names">Hafiz Sayed Mudassir Ali</h1>
+        <div class="and">with</div>
+        <h1 class="names">Sayeda Farhana</h1>
 
-        <img src="bottom-flowers.png" alt="Floral bottom" class="border bottom">
+        <p class="footer">
+          <span class="highlight" style="color:inherit">
+            d/o. Alhaj Mr Abrar Niyamutallah Sayed<br/>
+            &amp; Mrs. Fatima Abrar Sayed
+          </span>
+        </p>
+
       </div>
-    </div>
+    </section>
   </main>
-
-  <!-- Star animation (single, de-duplicated) -->
-  <script>
-    const starsContainer = document.querySelector('.stars');
-    const numStars = 70;
-
-    for (let i = 0; i < numStars; i++) {
-      const star = document.createElement('div');
-      star.classList.add('star');
-      star.style.left = Math.random() * 100 + 'vw';
-      star.style.top = Math.random() * 100 + 'vh';
-      star.style.width = star.style.height = 2 + Math.random() * 3 + 'px';
-      star.style.animationDuration = 4 + Math.random() * 6 + 's';
-      star.style.opacity = 0.5 + Math.random() * 0.5;
-      starsContainer.appendChild(star);
-    }
-  </script>
 </body>
 </html>
