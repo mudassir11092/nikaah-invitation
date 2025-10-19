@@ -12,9 +12,10 @@
   --navy:#0B3D91;
   --gold:#D4AF37;
   --white:#FFFFFF;
+  --trail: rgba(11,61,145,.1);
 }
 
-/* Base + star trails */
+/* Base */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -24,27 +25,34 @@ body{
     var(--navy);
   color:var(--white);
   font-family:"Source Sans 3",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Open Sans",sans-serif;
-  line-height:1.48; overflow-x:hidden;
+  line-height:1.48; overflow:hidden; /* for canvas */
 }
+
+/* Confetti canvas sits behind everything */
+#confetti{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+}
+
+/* Star trails layer for celestial continuity */
 .trails{
-  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.25;
+  position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.22;
   background:
     radial-gradient(600px 200px at 10% 20%, rgba(255,255,255,.35), transparent 60%),
     radial-gradient(500px 180px at 80% 60%, rgba(255,255,255,.25), transparent 60%),
     radial-gradient(400px 160px at 30% 80%, rgba(255,255,255,.25), transparent 60%);
   animation: drift 40s linear infinite;
-  filter: blur(1.2px);
+  filter: blur(1px);
 }
-@keyframes drift{ to{ transform: translate(-60px, -30px) } }
+@keyframes drift{ to{ transform: translate(-60px,-30px) } }
 
 /* Page/Card */
 .page{
   min-height:100%; display:grid; place-items:center;
-  padding:6vmin 3vmin 90px; position:relative; z-index:1;
+  padding:6vmin 3vmin 90px; position:relative; z-index:2;
 }
 .card{
   position:relative; max-width:min(860px,94vw); width:100%;
-  background: rgba(255,255,255,.06);
+  background: rgba(255,255,255,.07);
   border-radius:22px; padding:18px;
   box-shadow: 0 0 0 2px rgba(212,175,55,.7) inset, 0 0 0 16px rgba(255,255,255,.08) inset, 0 24px 50px rgba(0,0,0,.35);
   overflow:hidden;
@@ -61,7 +69,7 @@ body{
 p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:#f4f4f4; }
 .rule{ width:min(220px,40%); height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:16px auto; opacity:.9; }
 
-/* RSVP button placeholder (replace href with your form link) */
+/* RSVP button (replace href with your actual form link) */
 .btn{
   display:inline-block; margin-top:10px; padding:10px 18px; border-radius:999px;
   color:#0b2458; background:linear-gradient(180deg, #f7e8a9, #d9bd56);
@@ -75,7 +83,7 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:#
   display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
   background: rgba(11,61,145,.92);
   border-top:2px solid var(--gold);
-  padding:12px 10px; z-index:10; backdrop-filter: blur(4px);
+  padding:12px 10px; z-index:5; backdrop-filter: blur(4px);
 }
 .nav-tabs a{
   text-decoration:none; color:var(--gold);
@@ -84,17 +92,20 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:#
   padding:6px 10px; border-bottom:2px solid transparent; transition:all .25s ease;
 }
 .nav-tabs a:hover, .nav-tabs a.active{ color:#fff4c9; border-bottom:2px solid #fff4c9; }
+
 @media print{ .nav-tabs{display:none} .page{padding:0} }
 </style>
 </head>
 <body>
 
+<canvas id="confetti"></canvas>
 <div class="trails" aria-hidden="true"></div>
 
 <main class="page">
   <section class="card">
     <div class="panel center">
 
+      <!-- *** WORDING KEPT EXACTLY AS PROVIDED *** -->
       <p class="hdg">kindly RSVP by 8th of December 2025</p>
 
       <p>With best compliments and heartfelt duās from the families, grateful for your presence and prayers in making these blessed occasion truly memorable.</p>
@@ -116,6 +127,7 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:#
       <a class="btn" href="#" target="_blank" rel="noopener">Open RSVP Form</a>
 
       <p class="hdg" style="margin-top:1.2em;">kindly RSVP by 8th of December 2025</p>
+      <!-- *** END WORDING *** -->
 
     </div>
   </section>
@@ -130,6 +142,127 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:#
   <a href="rsvp.html" class="active">RSVP</a>
 </nav>
 
+<script>
+/* Lightweight confetti canvas (navy/gold/white) */
+(() => {
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  let w = 0, h = 0, dpr = 1;
+
+  function resize(){
+    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    w = canvas.width = Math.floor(innerWidth * dpr);
+    h = canvas.height = Math.floor(innerHeight * dpr);
+    canvas.style.width = innerWidth + 'px';
+    canvas.style.height = innerHeight + 'px';
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.scale(dpr, dpr);
+  }
+  addEventListener('resize', resize, {passive:true});
+  resize();
+
+  const COLORS = ['#D4AF37', '#FFFFFF', '#C9B37A', '#9BB6FF']; // gold/white + soft accents
+  const GRAVITY = 0.09;
+  const DRAG = 0.995;
+  const WIND = 0.02;
+  const COUNT = 160;   // total pieces
+  const pieces = [];
+
+  function rand(min, max){ return Math.random()*(max-min)+min; }
+  function pick(arr){ return arr[(Math.random()*arr.length)|0]; }
+
+  class Confetto{
+    constructor(){
+      this.reset();
+    }
+    reset(){
+      this.x = rand(0, innerWidth);
+      this.y = rand(-h*0.2, -30);
+      this.w = rand(6, 12);
+      this.h = rand(10, 18);
+      this.vx = rand(-0.6, 0.6);
+      this.vy = rand(1.2, 2.6);
+      this.ay = GRAVITY;
+      this.spin = rand(-0.12, 0.12);
+      this.tilt = rand(-Math.PI, Math.PI);
+      this.color = pick(COLORS);
+      this.shape = Math.random()<0.2 ? 'circle' : (Math.random()<0.65 ? 'rect' : 'tri');
+      this.opacity = rand(0.65, 1);
+    }
+    step(){
+      this.vx += (Math.random()-0.5)*WIND*0.2;
+      this.vx *= DRAG;
+      this.vy = this.vy*DRAG + this.ay;
+      this.x += this.vx;
+      this.y += this.vy;
+      this.tilt += this.spin;
+
+      if(this.y > innerHeight + 30) this.reset();
+    }
+    draw(){
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.tilt);
+      ctx.fillStyle = this.color;
+      switch(this.shape){
+        case 'rect':
+          ctx.fillRect(-this.w/2, -this.h/2, this.w, this.h);
+          break;
+        case 'circle':
+          ctx.beginPath();
+          ctx.arc(0,0, this.w*0.6, 0, Math.PI*2);
+          ctx.fill();
+          break;
+        case 'tri':
+          ctx.beginPath();
+          ctx.moveTo(0, -this.h/2);
+          ctx.lineTo(this.w/2, this.h/2);
+          ctx.lineTo(-this.w/2, this.h/2);
+          ctx.closePath();
+          ctx.fill();
+          break;
+      }
+      ctx.restore();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // Initialize pieces
+  for(let i=0;i<COUNT;i++) pieces.push(new Confetto());
+
+  // Burst on load and on click
+  function burst(cx = innerWidth/2, cy = innerHeight*0.35){
+    for(let i=0;i<40;i++){
+      const p = new Confetto();
+      p.x = cx + rand(-40,40);
+      p.y = cy + rand(-20,20);
+      p.vx = rand(-3,3);
+      p.vy = rand(-4,-1);
+      p.tilt = rand(-Math.PI, Math.PI);
+      p.spin = rand(-0.25,0.25);
+      pieces.push(p);
+    }
+    // keep array in check
+    if(pieces.length > COUNT + 180) pieces.splice(0, pieces.length - (COUNT + 180));
+  }
+  burst(); // initial celebration
+  addEventListener('click', e => burst(e.clientX, e.clientY));
+
+  // Animation loop
+  function frame(){
+    requestAnimationFrame(frame);
+    ctx.clearRect(0,0,innerWidth,innerHeight);
+
+    // subtle trailing to soften motion
+    ctx.fillStyle = 'rgba(11,61,145,0.10)';
+    ctx.fillRect(0,0,innerWidth,innerHeight);
+
+    pieces.forEach(p => { p.step(); p.draw(); });
+  }
+  frame();
+})();
+</script>
+
 </body>
 </html>
-
