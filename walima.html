@@ -13,50 +13,54 @@
   --gold:#CBA135;
   --cream:#F4EAD5;
   --onyx:#1B1B1B;
-  --ink:rgba(0,0,0,.25);
 }
 
-/* Base with arabesque texture */
+/* Base */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0;
-  background:
-    radial-gradient(1200px 600px at 50% -10%, rgba(203,161,53,.10), transparent 60%),
-    var(--burgundy);
+  background: var(--burgundy);
   color:var(--cream);
   font-family:"Source Sans 3",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Open Sans",sans-serif;
-  line-height:1.5; overflow-x:hidden;
+  line-height:1.5; overflow:hidden; /* hide overflow so canvas doesn't scroll */
 }
+
+/* Fireworks canvas behind everything */
+#fireworks{
+  position:fixed; inset:0; z-index:0; pointer-events:none; background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(203,161,53,.08), transparent 60%),
+    radial-gradient(1200px 600px at 50% 110%, rgba(75,14,14,.15), transparent 60%),
+    var(--burgundy);
+}
+
+/* Subtle arabesque texture on top of canvas but behind content */
 .texture{
-  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.16;
+  position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.14;
   background:
     url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'>\
-<g fill='none' stroke='%23CBA135' stroke-opacity='.9' stroke-width='0.8'>\
-<path d='M0 40h800M0 80h800M0 120h800' opacity='.05'/>\
-</g>\
-<g fill='none' stroke='%23CBA135' stroke-opacity='.35' stroke-width='1.2'>\
+<g fill='none' stroke='%23CBA135' stroke-opacity='.35' stroke-width='1.1'>\
 <path d='M40,400c70-120,180-140,260-70s40,200-80,260-220,10-180-110Z'/>\
 <path d='M760,400c-70,120-180,140-260,70s-40-200,80-260,220-10,180,110Z'/>\
 </g></svg>") center/cover no-repeat;
-  filter: blur(0.4px);
+  filter: blur(0.3px);
 }
 
 /* Ornate gold frame */
 .page{
   min-height:100%; display:grid; place-items:center;
-  padding:6vmin 3vmin 90px; position:relative; z-index:1;
+  padding:6vmin 3vmin 90px; position:relative; z-index:2; /* above canvas/texture */
 }
 .page::before{
-  content:""; position:fixed; inset:18px; border-radius:22px; pointer-events:none;
+  content:""; position:fixed; inset:18px; border-radius:22px; pointer-events:none; z-index:2;
   box-shadow:
     0 0 0 2px var(--gold) inset,
     0 0 0 16px rgba(255,255,255,.06) inset,
     0 0 0 18px var(--gold) inset;
 }
 
-/* Card with gold floral frame */
+/* Card with gold floral guides */
 .card{
   position:relative; max-width:min(1000px,94vw); width:100%;
   background: rgba(0,0,0,.12); border-radius:24px; padding:18px;
@@ -71,14 +75,13 @@ body{
 <g fill='none' stroke='%23CBA135' stroke-width='2'>\
 <path d='M20,80 C120,10 200,10 300,80 400,150 480,150 580,80'/>\
 <path d='M20,320 C120,390 200,390 300,320 400,250 480,250 580,320'/>\
-</g>\
-</svg>") center/90% 90% no-repeat;
+</g></svg>") center/90% 90% no-repeat;
   opacity:.6;
 }
 
-/* Optional mosque silhouette */
+/* Optional subtle silhouette */
 .sil{
-  position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:280px; height:120px; opacity:.28;
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%); width:280px; height:120px; opacity:.24;
   background:
     radial-gradient(circle at 30% 70%, var(--gold) 2px, transparent 3px) 0 0/30px 30px,
     linear-gradient(var(--gold), var(--gold)) 50% 40% / 40% 6px no-repeat;
@@ -92,7 +95,7 @@ body{
   background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
 }
 
-/* Type */
+/* Typography */
 .center{text-align:center}
 .hdg,.hdg2{ font-family:"Playfair Display","Bodoni Moda",serif; color:var(--cream); }
 .hdg{ font-weight:700; font-size:clamp(22px,3.2vmin,30px); letter-spacing:.02em; margin:.2em 0 .6em; }
@@ -101,13 +104,13 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:v
 .rule{ width:min(220px,40%); height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:16px auto; opacity:.9; }
 .names{ font-family:"Playfair Display",serif; font-weight:700; font-size:clamp(30px,5.6vmin,56px); color:#ffe9b8; }
 
-/* Tabs */
+/* Bottom tabs */
 .nav-tabs{
   position:fixed; bottom:0; left:0; width:100%;
   display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
   background: rgba(75, 14, 14, .92);
   border-top:2px solid var(--gold);
-  padding:12px 10px; z-index:10; backdrop-filter: blur(4px);
+  padding:12px 10px; z-index:5; backdrop-filter: blur(4px);
 }
 .nav-tabs a{
   text-decoration:none; color:var(--gold);
@@ -116,11 +119,13 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:v
   padding:6px 10px; border-bottom:2px solid transparent; transition:all .25s ease;
 }
 .nav-tabs a:hover, .nav-tabs a.active{ color:#fff0c6; border-bottom:2px solid #fff0c6; }
+
 @media print{ .nav-tabs{display:none} .page{padding:0} }
 </style>
 </head>
 <body>
 
+<canvas id="fireworks"></canvas>
 <div class="texture" aria-hidden="true"></div>
 
 <main class="page">
@@ -128,6 +133,7 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:v
     <div class="sil" aria-hidden="true"></div>
     <div class="panel center">
 
+      <!-- *** DO NOT EDIT WORDING BELOW *** -->
       <p>Abdullah ibn al-Zubayr (ra) reported: the Messenger of Allah ﷺ said<br>Announce the marriage.. (Sahih Ibn Hibban)</p>
 
       <h2 class="hdg">With hearts filled with gratitude to Allah ﷻ for His boundless blessings,</h2>
@@ -142,9 +148,10 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:v
 
       <div class="rule"></div>
 
-      <p>In'sha Allah on: 25th of December 2025 ~ 4th of Rajab 1447 AH<br>Nickah Ceremony at 07:00 pm followed by Dinner</p>
+      <p>In'sha Allah on: 25th of December 2025 ~ 4th of Rajab 1447 AH<br>Nikah Ceremony at 07:00 pm followed by Dinner</p>
       <p>At ~ Hyatt Regency Pune &amp; Residences, Nagar Rd, Sakore Nagar, Viman Nagar, Pune: 411040</p>
       <p class="hdg2" style="letter-spacing:.02em;text-transform:none;">kindly RSVP by 8th of December 2025</p>
+      <!-- *** END WORDING *** -->
 
     </div>
   </section>
@@ -159,6 +166,151 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:v
   <a href="rsvp.html">RSVP</a>
 </nav>
 
+<script>
+/* Elegant fireworks background (gold/cream/burgundy) */
+(() => {
+  const canvas = document.getElementById('fireworks');
+  const ctx = canvas.getContext('2d');
+  let w, h, dpr;
+
+  function resize(){
+    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    w = canvas.width = Math.floor(innerWidth * dpr);
+    h = canvas.height = Math.floor(innerHeight * dpr);
+    canvas.style.width = innerWidth + 'px';
+    canvas.style.height = innerHeight + 'px';
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.scale(dpr, dpr);
+  }
+  addEventListener('resize', resize, {passive:true});
+  resize();
+
+  const GOLD = '#CBA135';
+  const CREAM = '#F4EAD5';
+  const BURG = '#803232'; // soft burgundy pop
+
+  const GRAVITY = 0.06;
+  const FRICTION = 0.985;
+  const TRAIL = 0.16;
+  const MAX_PARTICLES = 300; // perf guard
+
+  const sparks = [];
+  const rockets = [];
+
+  function rand(min, max){ return Math.random()*(max-min)+min; }
+  function hueColor(){
+    const pick = Math.random();
+    return pick < 0.5 ? GOLD : (pick < 0.85 ? CREAM : BURG);
+  }
+
+  class Particle{
+    constructor(x,y,speed,angle,color,life=60,size=2){
+      this.x=x; this.y=y;
+      this.vx = Math.cos(angle)*speed;
+      this.vy = Math.sin(angle)*speed;
+      this.life = life;
+      this.alpha = 1;
+      this.size = size;
+      this.color = color;
+    }
+    step(){
+      this.vx *= FRICTION;
+      this.vy = this.vy*FRICTION + GRAVITY;
+      this.x += this.vx;
+      this.y += this.vy;
+      this.life--;
+      this.alpha = Math.max(0, this.life/60);
+      return this.life>0;
+    }
+    draw(){
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = this.alpha;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  class Rocket{
+    constructor(){
+      this.x = rand(innerWidth*0.15, innerWidth*0.85);
+      this.y = innerHeight + rand(10, 60);
+      this.vx = rand(-0.4, 0.4);
+      this.vy = rand(-8.5, -11.5);
+      this.color = hueColor();
+      this.exploded = false;
+      this.alt = rand(innerHeight*0.25, innerHeight*0.5);
+    }
+    step(){
+      this.x += this.vx;
+      this.y += this.vy;
+      this.vy += 0.08; // gravity for rocket
+      if(this.vy >= 0 || this.y < this.alt){
+        this.explode();
+        return false;
+      }
+      // rocket trail
+      sparks.push(new Particle(this.x, this.y, rand(0.5,1.2), rand(0,Math.PI*2), this.color, 18, 1.2));
+      return true;
+    }
+    explode(){
+      const count = Math.floor(rand(28, 46));
+      const color = this.color;
+      for(let i=0;i<count;i++){
+        const angle = (Math.PI*2) * (i/count) + rand(-0.1,0.1);
+        const speed = rand(2.2, 4.4);
+        sparks.push(new Particle(this.x, this.y, speed, angle, color, 60, rand(1.2,2.2)));
+      }
+      // inner pearly core
+      for(let i=0;i<12;i++){
+        sparks.push(new Particle(this.x, this.y, rand(1,2), rand(0,Math.PI*2), CREAM, 50, 1.5));
+      }
+    }
+    draw(){
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 2, 0, Math.PI*2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+  }
+
+  // Main loop
+  let last = 0;
+  function tick(ts){
+    requestAnimationFrame(tick);
+    const dt = ts - last; last = ts;
+
+    // fade previous frame (light trail)
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = `rgba(0,0,0,${TRAIL})`;
+    ctx.fillRect(0,0,innerWidth,innerHeight);
+    ctx.globalCompositeOperation = 'lighter';
+
+    // maybe launch a rocket
+    if(Math.random() < 0.06) rockets.push(new Rocket());
+    // keep a minimum cadence
+    if(rockets.length < 3 && Math.random() < 0.04) rockets.push(new Rocket());
+
+    // step & draw rockets
+    for(let i=rockets.length-1;i>=0;i--){
+      if(!rockets[i].step()) rockets.splice(i,1);
+      else rockets[i].draw();
+    }
+
+    // cap particles for performance
+    if(sparks.length > MAX_PARTICLES) sparks.splice(0, sparks.length - MAX_PARTICLES);
+
+    // step & draw particles
+    for(let i=sparks.length-1;i>=0;i--){
+      const p = sparks[i];
+      if(!p.step()) { sparks.splice(i,1); continue; }
+      p.draw();
+    }
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+
 </body>
 </html>
-
