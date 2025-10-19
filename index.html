@@ -14,6 +14,7 @@
   --gold:#d7b56d;
   --gold-hi:#e7c986;
   --paper:#0a1025;
+  --ivory:#fffaf0; /* inner lattice color */
 }
 
 /* base */
@@ -31,17 +32,18 @@ body{
   overflow-x:hidden;
 }
 
-/* layers */
+/* back layers */
 .stars{
   position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden;
 }
+
+/* GOLD Arabic lattice (outside frame, above stars) */
 .lattice{
   position:fixed; inset:0; pointer-events:none; z-index:2;
-  opacity:.22; /* overall strength of lattice */
-  /* Tileable Arabic/Islamic-inspired lattice (overlapping circles) */
+  opacity:0.32;
   background-image: url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'>\
-<g fill='none' stroke='%23e7c986' stroke-opacity='.9' stroke-width='1'>\
+<g fill='none' stroke='%23d7b56d' stroke-width='1.2'>\
 <circle cx='40' cy='0' r='40'/>\
 <circle cx='40' cy='80' r='40'/>\
 <circle cx='0' cy='40' r='40'/>\
@@ -49,11 +51,10 @@ body{
 </g></svg>");
   background-size: 80px 80px;
   background-position: center;
-  /* A faint glow to mimic gilt ink on navy */
-  filter: drop-shadow(0 0 6px rgba(231,201,134,.08));
+  filter: drop-shadow(0 0 8px rgba(215,181,109,.25));
 }
 
-/* center page/frame sits above lattice */
+/* center page/frame */
 .page{
   min-height:100%;
   display:grid;
@@ -95,7 +96,7 @@ body{
   filter: drop-shadow(0 10px 16px rgba(0,0,0,.25));
 }
 
-/* inner arched panel */
+/* inner arched panel (content container) */
 .panel{
   position:relative;
   background:
@@ -104,6 +105,30 @@ body{
   border:2px solid var(--gold);
   border-radius:220px/42px 42px 28px 28px;
   padding:min(8vmin,72px) min(7vmin,64px);
+  overflow:hidden; /* so inner lattice trims to the arch shape */
+}
+
+/* ✅ NEW: IVORY lattice under the wording (inside the panel) */
+.panel::after{
+  content:"";
+  position:absolute;
+  inset: clamp(14px, 4vmin, 28px); /* keep a little margin from the inner border */
+  z-index:0; /* behind text */
+  opacity:.18; /* light so it never blocks readability */
+  /* diamond/mesh lattice made from two diagonal repeating lines */
+  background:
+    repeating-linear-gradient(45deg, var(--ivory) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(-45deg, var(--ivory) 0 1px, transparent 1px 26px);
+  background-blend-mode:normal;
+  /* very soft glow to emulate ink on silk */
+  filter: drop-shadow(0 0 4px rgba(255,250,240,.08));
+  border-radius: inherit;
+}
+
+/* ensure all text/content sits above the inner lattice */
+.panel > *{
+  position:relative;
+  z-index:1;
 }
 
 /* typography */
@@ -142,7 +167,7 @@ body{
   .card{ box-shadow:none; }
 }
 
-/* stars animation (unchanged) */
+/* stars animation */
 .star{
   position:absolute; background:#fff; border-radius:50%;
   opacity:.8; animation: fall linear infinite, twinkle 2s infinite alternate;
@@ -156,9 +181,8 @@ body{
 </head>
 <body>
 
-  <!-- back layer -->
+  <!-- back layers -->
   <div class="stars" aria-hidden="true"></div>
-  <!-- new lattice layer (between stars and frame) -->
   <div class="lattice" aria-hidden="true"></div>
 
   <!-- card -->
@@ -205,7 +229,7 @@ body{
   </main>
 
 <script>
-  // create stars
+  // create falling stars
   const starsContainer = document.querySelector('.stars');
   const numStars = 70;
   for (let i = 0; i < numStars; i++) {
