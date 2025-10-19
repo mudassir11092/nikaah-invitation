@@ -1,16 +1,16 @@
-/* Royal blue background */
+/* Body and background */
 body {
-  background-color: #4169e1; /* royal blue */
-  font-family: "Open Sans", sans-serif;
   margin: 0;
   padding: 0;
-  text-align: center;
+  font-family: "Open Sans", sans-serif;
+  background-color: #4169e1; /* Royal Blue */
   overflow-x: hidden;
   position: relative;
   color: #fff;
+  text-align: center;
 }
 
-/* Falling stars container */
+/* Stars container */
 .stars {
   position: fixed;
   top: 0;
@@ -18,24 +18,23 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  overflow: hidden;
   z-index: 1;
+  overflow: hidden;
 }
 
-/* Individual star */
+/* Individual stars */
 .star {
   position: absolute;
-  top: -10px;
-  background: #fff;
+  background-color: #fff;
   border-radius: 50%;
   opacity: 0.8;
   animation: fall linear infinite, twinkle 2s infinite alternate;
 }
 
-/* Falling + diagonal movement */
+/* Falling animation with slight diagonal */
 @keyframes fall {
-  0% { transform: translate(0, 0); opacity: 0.8; }
-  100% { transform: translate(50px, 100vh); opacity: 0; }
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.8; }
+  100% { transform: translate(50px, 100vh) rotate(360deg); opacity: 0; }
 }
 
 /* Twinkle effect */
@@ -48,12 +47,12 @@ body {
 .invitation {
   max-width: 600px;
   margin: 40px auto;
-  background-color: rgba(255,255,255,0.95);
-  border-radius: 8px;
+  background-color: rgba(255,255,255,0.95); /* slightly transparent */
+  border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   overflow: hidden;
   position: relative;
-  z-index: 2;
+  z-index: 2; /* stay above stars */
 }
 
 /* Borders */
