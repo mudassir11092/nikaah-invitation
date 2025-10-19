@@ -33,7 +33,7 @@ body{
   overflow-x:hidden;
 }
 
-/* Page wrapper (positions border, vines, and card) */
+/* Page wrapper (positions border, motifs, and card) */
 .page{
   min-height:100%;
   display:grid;
@@ -53,10 +53,10 @@ body{
     0 0 0 2px var(--mustard) inset,
     0 0 0 16px rgba(0,0,0,.15) inset,
     0 0 0 18px var(--mustard) inset;
-  z-index:3; /* above vines, below card */
+  z-index:2;
 }
 
-/* Soft paisley corner lines (very subtle) */
+/* Subtle paisley corner strokes */
 .page::after{
   content:"";
   position:fixed; inset:0; pointer-events:none; z-index:0;
@@ -66,7 +66,7 @@ body{
 <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>\
 <stop offset='0' stop-color='%23F1DB86'/><stop offset='1' stop-color='%23E0C45C'/>\
 </linearGradient></defs>\
-<g fill='none' stroke='url(%23g)' stroke-opacity='.22' stroke-width='1.2'>\
+<g fill='none' stroke='url(%23g)' stroke-opacity='.20' stroke-width='1.2'>\
 <path d='M30,120c40-80,120-90,170-40c50,50,10,120-50,160c-30,20-60,30-90,30'/>\
 <path d='M370,280c-40,80-120,90-170,40c-50-50-10-120,50-160c30-20,60-30,90-30'/>\
 </g></svg>") center/cover no-repeat;
@@ -75,69 +75,58 @@ body{
 }
 
 /* =========================
-   ANIMATED FLORAL VINES
+   HENNA MOTIF BACKGROUND
    ========================= */
-.vines{
-  position:fixed; inset:0; pointer-events:none; z-index:1; /* behind border & card */
-  overflow:hidden;
+.motifs{
+  position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden;
 }
-.vine{
-  position:absolute; width:520px; height:520px; opacity:.45;
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,.25));
-  transform-origin: center;
-  animation: sway 12s ease-in-out infinite;
+.motif{
+  position:absolute; width:180px; height:180px; opacity:0;
+  background-repeat:no-repeat; background-size:contain; background-position:center;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,.28));
+  transform: translate(-50%,-50%) scale(0.6) rotate(0deg);
+  animation: bloom 9s ease-in-out infinite;
 }
-.vine--lt{
-  left:-60px; top:-30px; transform-origin: 60% 40%;
-  animation-delay: 0s;
-}
-.vine--rb{
-  right:-60px; bottom:-40px; transform-origin: 40% 60%;
-  animation-delay: 6s;
-  transform: scaleX(-1) rotate(2deg); /* mirror for symmetry */
-}
-@keyframes sway{
-  0%,100%{ transform: rotate(-1.5deg) }
-  50%     { transform: rotate(1.5deg) }
+@keyframes bloom{
+  0%   { opacity:0; transform: translate(var(--x),var(--y)) scale(0.6) rotate(0deg); }
+  10%  { opacity:.55; transform: translate(var(--x),var(--y)) scale(1) rotate(8deg); }
+  50%  { opacity:.4; transform: translate(var(--x),var(--y)) scale(1.05) rotate(-6deg); }
+  80%  { opacity:.55; transform: translate(var(--x),var(--y)) scale(1) rotate(4deg); }
+  100% { opacity:0; transform: translate(var(--x),var(--y)) scale(0.6) rotate(-8deg); }
 }
 
-/* SVG vine artwork (mustard stems, coral buds, ivory leaves) as backgrounds */
-.vine{
-  background-image:
-  url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='520' height='520' viewBox='0 0 520 520'>\
-<defs>\
-<linearGradient id='stem' x1='0' y1='0' x2='1' y2='1'>\
-<stop offset='0' stop-color='%23E0C45C'/><stop offset='1' stop-color='%23D4B447'/>\
-</linearGradient>\
-</defs>\
-<g fill='none' stroke='url(%23stem)' stroke-width='2.2' stroke-linecap='round'>\
-<path d='M40,500 C80,420 120,380 160,360 C220,330 260,310 300,240 C340,170 360,120 480,60'/>\
-<path d='M120,460 C160,420 200,400 240,340 C280,280 320,240 420,180'/>\
-<path d='M90,390 C130,360 150,330 200,300'/>\
+/* SVG motifs (mustard/coral/ivory) */
+.motif[data-type="mandala"]{
+  background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'>\
+<g fill='none' stroke='%23E0C45C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
+<circle cx='120' cy='120' r='78'/><circle cx='120' cy='120' r='52'/>\
+<path d='M120 30l10 22 24 2-18 16 6 24-22-12-22 12 6-24-18-16 24-2z'/>\
 </g>\
-<!-- Ivory leaves -->\
-<g fill='%23FFF8E7' fill-opacity='0.9'>\
-<ellipse cx='156' cy='356' rx='10' ry='18' transform='rotate(-30 156 356)'/>\
-<ellipse cx='186' cy='334' rx='9' ry='16' transform='rotate(12 186 334)'/>\
-<ellipse cx='218' cy='300' rx='10' ry='18' transform='rotate(-18 218 300)'/>\
-<ellipse cx='258' cy='270' rx='9' ry='15' transform='rotate(22 258 270)'/>\
-<ellipse cx='298' cy='230' rx='8' ry='14' transform='rotate(-18 298 230)'/>\
-<ellipse cx='336' cy='198' rx='9' ry='16' transform='rotate(18 336 198)'/>\
+<g fill='%23FFF8E7' fill-opacity='.9'>\
+<circle cx='120' cy='120' r='6'/>\
 </g>\
-<!-- Coral buds -->\
-<g fill='%23E97A7A'>\
-<circle cx='120' cy='460' r='5'/>\
-<circle cx='200' cy='300' r='4'/>\
-<circle cx='260' cy='270' r='4'/>\
-<circle cx='300' cy='240' r='4'/>\
-<circle cx='420' cy='180' r='5'/>\
-<circle cx='480' cy='60' r='5'/>\
-</g>\
+<g fill='%23E97A7A'><circle cx='120' cy='42' r='4'/><circle cx='162' cy='60' r='3'/><circle cx='78' cy='60' r='3'/></g>\
 </svg>");
-  background-repeat:no-repeat;
-  background-size:contain;
-  background-position:center;
+}
+.motif[data-type="paisley"]{
+  background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>\
+<defs><linearGradient id='ms' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23E0C45C'/><stop offset='1' stop-color='%23D1B14E'/></linearGradient></defs>\
+<path d='M120 30c30 15 45 45 32 72-15 30-52 38-82 26C45 117 35 90 48 68c14-24 47-38 72-38z' fill='url(%23ms)' fill-opacity='.35' stroke='%23E0C45C' stroke-width='2'/>\
+<circle cx='110' cy='70' r='6' fill='%23E97A7A'/>\
+<circle cx='96' cy='88' r='4' fill='%23FFF8E7'/>\
+</svg>");
+}
+.motif[data-type="flower"]{
+  background-image:url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'>\
+<g fill='none' stroke='%23E0C45C' stroke-width='2'>\
+<circle cx='110' cy='110' r='58'/>\
+<path d='M110 34c10 14 10 28 0 42c-10-14-10-28 0-42zM110 144c10 14 10 28 0 42c-10-14-10-28 0-42zM34 110c14-10 28-10 42 0c-14 10-28 10-42 0zM144 110c14-10 28-10 42 0c-14 10-28 10-42 0z'/>\
+</g>\
+<circle cx='110' cy='110' r='6' fill='%23E97A7A'/>\
+</svg>");
 }
 
 /* Card + Headband + Panel */
@@ -145,7 +134,7 @@ body{
   position:relative;
   max-width:min(920px, 94vw);
   width:100%;
-  z-index:4; /* above border & vines */
+  z-index:3; /* above motifs & border */
 }
 .banner{
   height:64px;
@@ -244,7 +233,7 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); }
 .emph{ color:var(--mustard); font-weight:600; }
 .venue{ font-weight:600; }
 
-/* Bottom nav tabs (match your site) */
+/* Bottom nav tabs */
 .nav-tabs{
   position:fixed; bottom:0; left:0; width:100%;
   display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
@@ -260,6 +249,9 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); }
 }
 .nav-tabs a:hover, .nav-tabs a.active{ color:#fff2b3; border-bottom:2px solid #fff2b3; }
 
+@media (max-width:520px){
+  .motif{ width:140px; height:140px; }
+}
 @media print{
   .nav-tabs{display:none}
   .page{padding:0}
@@ -269,11 +261,9 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); }
 <body>
 
 <main class="page">
-  <!-- Animated floral vines layer -->
-  <div class="vines" aria-hidden="true">
-    <div class="vine vine--lt"></div>
-    <div class="vine vine--rb"></div>
-  </div>
+
+  <!-- Animated henna motif layer -->
+  <div class="motifs" aria-hidden="true" id="motifs"></div>
 
   <section class="card">
     <div class="banner"></div>
@@ -315,6 +305,47 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); }
   <a href="walima.html">Walima</a>
   <a href="rsvp.html">RSVP</a>
 </nav>
+
+<script>
+/* Create floating henna motifs that pop/fade around the background */
+const motifs = document.getElementById('motifs');
+const TYPES = ['mandala','paisley','flower'];
+const COUNT = 10; // number on screen; keep modest for performance
+
+function spawnMotif(){
+  const m = document.createElement('div');
+  m.className = 'motif';
+  m.dataset.type = TYPES[Math.floor(Math.random()*TYPES.length)];
+
+  // random position in viewport
+  const x = Math.random()*100;    // vw
+  const y = Math.random()*100;    // vh
+  m.style.setProperty('--x', x+'vw');
+  m.style.setProperty('--y', y+'vh');
+
+  // random stagger/duration/size
+  const delay = (Math.random()*6).toFixed(2)+'s';
+  const dur = (7 + Math.random()*6).toFixed(2)+'s';
+  const size = 120 + Math.floor(Math.random()*120);
+  m.style.animationDelay = delay;
+  m.style.animationDuration = dur;
+  m.style.width = m.style.height = size+'px';
+
+  motifs.appendChild(m);
+
+  // remove after its animation completes
+  const totalMs = (parseFloat(delay)+parseFloat(dur))*1000;
+  setTimeout(()=> m.remove(), totalMs + 200);
+}
+
+function keepField(){
+  // keep ~COUNT motifs active by spawning periodically
+  const active = motifs.querySelectorAll('.motif').length;
+  for(let i=active;i<COUNT;i++) spawnMotif();
+}
+keepField();
+setInterval(keepField, 1200); // periodically top up
+</script>
 
 </body>
 </html>
