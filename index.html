@@ -1,78 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mudassir Ali  &#x2665; Farhana— Nikaah Invitation</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mudassir Ali ♥ Farhana — Nikaah Invitation</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600&family=Open+Sans&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-
+  <!-- Your fonts + a classy serif for body copy -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Open+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Falling stars container -->
-  <div class="stars"></div>
+  <!-- Falling stars -->
+  <div class="stars" aria-hidden="true"></div>
 
-  <div class="invitation">
-    <img src="top-flowers.png" alt="Floral top" class="border top">
+  <!-- Page center -->
+  <main class="page">
+    <!-- Ornate outer frame -->
+    <div class="frame">
+      <!-- Arched inner panel; we keep your class 'invitation' for the content box -->
+      <div class="inner invitation">
 
-    <div class="content">
-      <p class="arabic">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-      <p class="subtitle">(With Allah’s Blessings)</p>
-      <p class="intro">We invite you to the Nikaah ceremony of</p>
+        <!-- keep your optional floral images (hide if files not present) -->
+        <img src="top-flowers.png" alt="Floral top" class="border top">
 
-      <h1 class="names"> Hafiz Mudassir Ali Sayed<br>&amp;<br>Sayeda Farhana</h1>
+        <div class="content">
+          <p class="arabic">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+          <p class="subtitle">(With Allah’s Blessings)</p>
+          <p class="intro">We invite you to the Nikaah ceremony of</p>
 
-      <div class="date-box">
-        <div class="side">Wednesday</div>
-        <div class="middle">
-          <div class="month">December</div>
-          <div class="day">24</div>
-          <div class="year">2025</div>
+          <h1 class="names">Hafiz Mudassir Ali Sayed<br>&amp;<br>Sayeda Farhana</h1>
+
+          <div class="date-box">
+            <div class="side">Wednesday</div>
+            <div class="middle">
+              <div class="month">December</div>
+              <div class="day">24</div>
+              <div class="year">2025</div>
+            </div>
+            <div class="side">6 PM</div>
+          </div>
+
+          <div class="venue">
+            <p><strong>Alankar Lawn</strong></p>
+            <p>47 NIMB Road Pune</p>
+            <p>RSVP at Mehbz 085555</p>
+          </div>
         </div>
-        <div class="side">6 PM</div>
-      </div>
 
-      <div class="venue">
-        <p><strong>Alankar Lawn</strong></p>
-        <p>47 NIMB Road Pune</p>
-        <p>RSVP at Mehbz 085555</p>
+        <img src="bottom-flowers.png" alt="Floral bottom" class="border bottom">
       </div>
     </div>
+  </main>
 
-    <img src="bottom-flowers.png" alt="Floral bottom" class="border bottom">
-  </div>
-
-  <!-- Star animation script -->
+  <!-- Star animation (single, de-duplicated) -->
   <script>
     const starsContainer = document.querySelector('.stars');
-    const numStars = 60; // number of stars
+    const numStars = 70;
 
     for (let i = 0; i < numStars; i++) {
       const star = document.createElement('div');
       star.classList.add('star');
       star.style.left = Math.random() * 100 + 'vw';
-      star.style.animationDuration = 4 + Math.random() * 3 + 's';
+      star.style.top = Math.random() * 100 + 'vh';
       star.style.width = star.style.height = 2 + Math.random() * 3 + 'px';
+      star.style.animationDuration = 4 + Math.random() * 6 + 's';
       star.style.opacity = 0.5 + Math.random() * 0.5;
       starsContainer.appendChild(star);
     }
   </script>
 </body>
 </html>
-<div class="stars"></div>
-
-<script>
-  const starsContainer = document.querySelector('.stars');
-  const numStars = 60;
-
-  for (let i = 0; i < numStars; i++) {
-    const star = document.createElement('div');
-    star.classList.add('star');
-    star.style.left = Math.random() * 100 + 'vw';
-    star.style.top = Math.random() * 100 + 'vh';
-    star.style.width = star.style.height = 2 + Math.random() * 3 + 'px';
-    star.style.animationDuration = 5 + Math.random() * 5 + 's';
-    starsContainer.appendChild(star);
-  }
-</script>
