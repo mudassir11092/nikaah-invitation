@@ -11,10 +11,7 @@
 :root{
   --beige:#F3E7D3;
   --mustard:#E6B31E;
-  --marigoldA:#FFD54F;
-  --marigoldB:#FFA726;
 }
-/* Base */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -41,10 +38,9 @@ body{
 .page::before{
   content:"";
   position:fixed; inset:18px; border-radius:18px; pointer-events:none; z-index:1;
-  box-shadow:
-    0 0 0 2px var(--mustard) inset,
-    0 0 0 16px rgba(0,0,0,.04) inset,
-    0 0 0 18px var(--mustard) inset;
+  box-shadow: 0 0 0 2px var(--mustard) inset,
+              0 0 0 16px rgba(0,0,0,.04) inset,
+              0 0 0 18px var(--mustard) inset;
 }
 
 /* Card */
@@ -55,10 +51,9 @@ body{
   border-radius:22px;
   padding:18px;
   background: rgba(255,255,255,.35);
-  box-shadow:
-    0 18px 50px rgba(0,0,0,.12),
-    0 0 0 2px rgba(230,179,30,.35) inset,
-    0 0 0 16px rgba(255,255,255,.25) inset;
+  box-shadow: 0 18px 50px rgba(0,0,0,.12),
+              0 0 0 2px rgba(230,179,30,.35) inset,
+              0 0 0 16px rgba(255,255,255,.25) inset;
   overflow:hidden;
 }
 .panel{
@@ -85,70 +80,16 @@ body{
 p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:var(--mustard); }
 .rule{ width:min(200px,40%); height:2px; background:linear-gradient(90deg,transparent,var(--mustard),transparent); margin:16px auto; opacity:.95; }
 
-/* ===== PERIPHERY MARIGOLDS (left/right columns) ===== */
-.periphery{
-  position:fixed; inset:0; pointer-events:none;
-  z-index:5; /* raise above frame/background so they’re visible */
+/* ===== PERIPHERY MARIGOLDS VIA CANVAS ===== */
+.marigold-edge{
+  position:fixed; top:0; width:12vw; min-width:76px; height:100vh;
+  pointer-events:none; z-index:5; /* over the frame */
 }
-.edge{
-  position:absolute; top:0; width:14vw; min-width:74px; height:100%;
-  overflow:hidden;
-}
-.edge.left{ left:0; }
-.edge.right{ right:0; }
+.marigold-edge.left{ left:0; }
+.marigold-edge.right{ right:0; }
+.marigold-edge canvas{ width:100%; height:100%; display:block; }
 
-/* Outer = vertical fall (its transform) */
-.flower{
-  position:absolute; width:46px; height:46px; opacity:.9;
-  top:-20vh; left:0;
-  animation: fall linear infinite;
-  will-change: transform, opacity;
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,.18));
-}
-/* Inner sprite = horizontal wobble (separate transform) */
-.flower .petal{
-  width:100%; height:100%;
-  background-repeat:no-repeat; background-size:contain; background-position:center;
-  animation: wobble 6s ease-in-out infinite;
-  will-change: transform;
-}
-
-/* Keyframes */
-@keyframes fall{
-  0%   { transform: translateY(0) rotate(0deg);   opacity:0; }
-  10%  { opacity:.9; }
-  100% { transform: translateY(130vh) rotate(200deg); opacity:.7; }
-}
-@keyframes wobble{
-  0%,100%{ transform: translateX(0) }
-  50%    { transform: translateX(6px) }
-}
-
-/* SVG marigolds on .petal */
-.petal[data-variant="a"]{
-  background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>\
-<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>\
-<stop offset='0' stop-color='%23FFA726'/><stop offset='1' stop-color='%23FFD54F'/>\
-</linearGradient></defs>\
-<g fill='url(%23g)' stroke='%23E6B31E' stroke-width='1'>\
-<circle cx='32' cy='16' r='10'/><circle cx='48' cy='24' r='10'/>\
-<circle cx='48' cy='40' r='10'/><circle cx='32' cy='48' r='10'/>\
-<circle cx='16' cy='40' r='10'/><circle cx='16' cy='24' r='10'/>\
-</g><circle cx='32' cy='32' r='8' fill='%23E6B31E'/></svg>");
-}
-.petal[data-variant="b"]{
-  background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>\
-<defs><radialGradient id='rg' cx='50%' cy='50%' r='60%'>\
-<stop offset='0' stop-color='%23FFD54F'/><stop offset='1' stop-color='%23FFA726'/>\
-</radialGradient></defs>\
-<g fill='url(%23rg)' stroke='%23E6B31E' stroke-width='1'>\
-<path d='M32 10c8 0 12 10 12 10s10 4 10 12-10 12-10 12-4 10-12 10-12-10-12-10-10-4-10-12 10-12 10-12 4-10 12-10z'/>\
-</g><circle cx='32' cy='32' r='6' fill='%23E6B31E'/></svg>");
-}
-
-/* Black instruments in corners (unchanged) */
+/* ===== BLACK INSTRUMENTS IN CORNERS ===== */
 .corner{ position:fixed; width:160px; height:160px; pointer-events:none; z-index:6; opacity:.9; background-repeat:no-repeat; background-size:contain; }
 .corner.tl{ top:14px; left:14px; transform: rotate(-6deg); }
 .corner.tr{ top:14px; right:14px; transform: rotate(6deg); }
@@ -163,7 +104,7 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 /* harmonium */
 .corner.br{ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='160' viewBox='0 0 220 160'><g fill='none' stroke='%23000' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'><rect x='20' y='70' width='160' height='60' rx='6'/><rect x='28' y='80' width='144' height='14' rx='2'/><line x1='34' y1='96' x2='170' y2='96'/><line x1='34' y1='104' x2='170' y2='104'/><circle cx='38' cy='86' r='2'/><circle cx='46' cy='86' r='2'/><circle cx='54' cy='86' r='2'/></g></svg>"); }
 
-/* Bottom tabs (auto-hide on scroll) */
+/* Tabs (auto-hide) */
 .nav-tabs{
   position:fixed; bottom:0; left:0; width:100%;
   display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
@@ -182,16 +123,14 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 .nav-tabs a:hover, .nav-tabs a.active{ color:#a07f0d; border-bottom:2px solid #a07f0d; }
 
 @media (max-width:520px){ .corner{width:128px;height:128px} }
-@media print{ .nav-tabs,.periphery,.corner{display:none} .page{padding:0} }
+@media print{ .nav-tabs,.marigold-edge,.corner{display:none} .page{padding:0} }
 </style>
 </head>
 <body>
 
-<!-- Marigolds confined to edges -->
-<div class="periphery" aria-hidden="true">
-  <div class="edge left" id="edgeL"></div>
-  <div class="edge right" id="edgeR"></div>
-</div>
+<!-- CANVAS-BASED MARIGOLDS ON PERIPHERY -->
+<div class="marigold-edge left"><canvas id="marigoldL"></canvas></div>
+<div class="marigold-edge right"><canvas id="marigoldR"></canvas></div>
 
 <!-- Corner instruments -->
 <div class="corner tl" aria-hidden="true"></div>
@@ -248,42 +187,107 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
   },{passive:true});
 })();
 
-/* Spawn marigolds down each edge (outer fall + inner wobble) */
-function spawnColumn(container){
-  const TARGET = 14;
-  for(let i=0;i<TARGET;i++) spawnOne(container);
-}
-function spawnOne(container){
-  const outer = document.createElement('div'); // fall
-  outer.className = 'flower';
-  outer.style.left = (Math.random()*86) + '%';
-  outer.style.top  = (-10 - Math.random()*30) + 'vh';
+/* ===== Marigold animation using two canvases (left & right) ===== */
+(function(){
+  const L = document.getElementById('marigoldL');
+  const R = document.getElementById('marigoldR');
+  const left = L.getContext('2d');
+  const right = R.getContext('2d');
+  let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
 
-  const dur = 12 + Math.random()*12;
-  const delay = Math.random()*8;
-  outer.style.animationDuration = dur + 's';
-  outer.style.animationDelay = delay + 's';
+  function sizeCanvas(){
+    const wL = L.clientWidth, hL = L.clientHeight;
+    const wR = R.clientWidth, hR = R.clientHeight;
+    [ [L,left,wL,hL], [R,right,wR,hR] ].forEach(([c,ctx,w,h])=>{
+      c.width = Math.floor(w * dpr);
+      c.height = Math.floor(h * dpr);
+      ctx.setTransform(1,0,0,1,0,0);
+      ctx.scale(dpr, dpr);
+    });
+  }
+  addEventListener('resize', sizeCanvas, {passive:true});
+  sizeCanvas();
 
-  const size = 38 + Math.floor(Math.random()*18);
-  outer.style.width = outer.style.height = size + 'px';
+  // Simple marigold particle (cluster of petals with gradient fill)
+  function makePetal(ctx, x, y, r, rot, colA, colB){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(rot);
+    // radial petal
+    const grd = ctx.createRadialGradient(0,0, r*0.1, 0,0, r);
+    grd.addColorStop(0, colA);
+    grd.addColorStop(1, colB);
+    ctx.fillStyle = grd;
+    for(let i=0;i<6;i++){
+      ctx.rotate(Math.PI/3);
+      ctx.beginPath();
+      ctx.ellipse(0, r*0.55, r*0.55, r*0.9, 0, 0, Math.PI*2);
+      ctx.fill();
+    }
+    // center
+    ctx.beginPath();
+    ctx.arc(0,0,r*0.36,0,Math.PI*2);
+    ctx.fillStyle = "#E6B31E";
+    ctx.fill();
+    ctx.restore();
+  }
 
-  const inner = document.createElement('span'); // wobble + sprite
-  inner.className = 'petal';
-  inner.setAttribute('data-variant', Math.random()<0.5 ? 'a' : 'b');
-  inner.style.animationDelay = (Math.random()*2).toFixed(2) + 's';
-  outer.appendChild(inner);
+  function spawnSide(sideCtx, width, height){
+    const pieces = [];
+    const COLS = [
+      {a:"#FFA726", b:"#FFD54F"},
+      {a:"#FFD54F", b:"#FFA726"}
+    ];
+    const MAX = 18; // density per side
+    for(let i=0;i<MAX;i++){
+      pieces.push(newPiece(width, height));
+    }
 
-  container.appendChild(outer);
+    function newPiece(w,h){
+      const size = 16 + Math.random()*18;   // radius-ish
+      const x = Math.random() * w;
+      const y = -20 - Math.random()*h*0.25;
+      return {
+        x, y,
+        vx: (Math.random() * 0.18) * (Math.random()<0.5 ? -1 : 1),
+        vy: 0.6 + Math.random()*0.8,
+        rot: Math.random()*Math.PI*2,
+        spin: (Math.random()*0.02 - 0.01),
+        r: size,
+        col: COLS[Math.random()<0.5?0:1]
+      };
+    }
 
-  // Recycle after fall completes
-  setTimeout(()=>{ outer.remove(); spawnOne(container); }, (dur+delay)*1000 + 600);
-}
+    function step(){
+      sideCtx.clearRect(0,0,width,height);
+      // soft trail backdrop
+      sideCtx.globalAlpha = 0.06;
+      sideCtx.fillStyle = "#000";
+      sideCtx.fillRect(0,0,width,height);
+      sideCtx.globalAlpha = 1;
 
-/* defer spawning until DOM & first paint */
-requestAnimationFrame(() => {
-  spawnColumn(document.getElementById('edgeL'));
-  spawnColumn(document.getElementById('edgeR'));
-});
+      pieces.forEach((p,idx)=>{
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx += (Math.random()-0.5)*0.02;  // breeze
+        p.rot += p.spin;
+        makePetal(sideCtx, p.x, p.y, p.r, p.rot, p.col.a, p.col.b);
+        if(p.y > height + 40){
+          pieces[idx] = newPiece(width,height);
+        }
+      });
+
+      requestAnimationFrame(step);
+    }
+    step();
+  }
+
+  // Start both sides after first paint (ensures correct sizing)
+  requestAnimationFrame(()=>{
+    spawnSide(left, L.clientWidth, L.clientHeight);
+    spawnSide(right, R.clientWidth, R.clientHeight);
+  });
+})();
 </script>
 
 </body>
