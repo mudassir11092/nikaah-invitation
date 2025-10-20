@@ -10,21 +10,51 @@
 <style>
 :root{ --burgundy:#4B0E0E; --gold:#CBA135; --cream:#F4EAD5; }
 *{box-sizing:border-box} html,body{height:100%}
-body{ margin:0; background: var(--burgundy); color:var(--cream); font-family:"Source Sans 3",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Open Sans",sans-serif; line-height:1.5; overflow:hidden; }
+body{
+  margin:0;
+  background: var(--burgundy);
+  color:var(--cream);
+  font-family:"Source Sans 3",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Open Sans",sans-serif;
+  line-height:1.5;
+  /* allow scrolling (fix) */
+  overflow-x:hidden;
+}
 
 /* fireworks canvas stays behind everything */
-#fireworks{ position:fixed; inset:0; z-index:0; pointer-events:none; background:
+#fireworks{
+  position:fixed; inset:0; z-index:0; pointer-events:none; background:
   radial-gradient(1200px 600px at 50% -10%, rgba(203,161,53,.08), transparent 60%),
   radial-gradient(1200px 600px at 50% 110%, rgba(75,14,14,.15), transparent 60%),
-  var(--burgundy); }
+  var(--burgundy);
+}
 
 /* frame & layout */
-.page{ min-height:100%; display:grid; place-items:center; padding:6vmin 3vmin 90px; position:relative; z-index:2; }
-.page::before{ content:""; position:fixed; inset:18px; border-radius:22px; pointer-events:none; z-index:1; box-shadow: 0 0 0 2px var(--gold) inset, 0 0 0 16px rgba(255,255,255,.06) inset, 0 0 0 18px var(--gold) inset; }
+.page{
+  min-height:100%;
+  display:grid; place-items:center;
+  padding:6vmin 3vmin 110px; /* extra bottom space so you can scroll past the tabs */
+  position:relative; z-index:2;
+}
+.page::before{
+  content:""; position:fixed; inset:18px; border-radius:22px; pointer-events:none; z-index:1;
+  box-shadow: 0 0 0 2px var(--gold) inset, 0 0 0 16px rgba(255,255,255,.06) inset, 0 0 0 18px var(--gold) inset;
+}
 
-/* card and panel are now opaque so fireworks never bleed through text */
-.card{ position:relative; max-width:min(1000px,94vw); width:100%; background: rgba(36,6,6,.92); border-radius:24px; padding:18px; box-shadow: 0 0 0 2px var(--gold) inset, 0 0 0 16px rgba(203,161,53,.25) inset, 0 24px 50px rgba(0,0,0,.35); overflow:hidden; }
-.panel{ position:relative; border:2px solid var(--gold); border-radius:200px/48px 48px 28px 28px; padding:min(8vmin,72px) min(7vmin,64px); background: rgba(75,14,14,.92); }
+/* card and panel are opaque so fireworks never bleed through text */
+.card{
+  position:relative; max-width:min(1000px,94vw); width:100%;
+  background: rgba(36,6,6,.92);
+  border-radius:24px; padding:18px;
+  box-shadow: 0 0 0 2px var(--gold) inset, 0 0 0 16px rgba(203,161,53,.25) inset, 0 24px 50px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.panel{
+  position:relative;
+  border:2px solid var(--gold);
+  border-radius:200px/48px 48px 28px 28px;
+  padding:min(8vmin,72px) min(7vmin,64px);
+  background: rgba(75,14,14,.92);
+}
 
 /* type */
 .center{text-align:center}
@@ -35,14 +65,22 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:v
 .rule{ width:min(220px,40%); height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:16px auto; opacity:.9; }
 .names{ font-family:"Playfair Display",serif; font-weight:700; font-size:clamp(30px,5.6vmin,56px); color:#ffe9b8; }
 
-/* tabs: hide when user scrolls UP; show when they stop */
+/* tabs: hide when user scrolls UP; show when scrolling DOWN; also show after stop */
 .nav-tabs{
-  position:fixed; bottom:0; left:0; width:100%; display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
-  background: rgba(75, 14, 14, .92); border-top:2px solid var(--gold); padding:12px 10px; z-index:5; backdrop-filter: blur(4px);
+  position:fixed; bottom:0; left:0; width:100%;
+  display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
+  background: rgba(75, 14, 14, .92);
+  border-top:2px solid var(--gold);
+  padding:12px 10px; z-index:5; backdrop-filter: blur(4px);
   transition: transform .35s ease, opacity .35s ease;
 }
 .nav-tabs.hide{ transform:translateY(100%); opacity:0; }
-.nav-tabs a{ text-decoration:none; color:var(--gold); font-family:"Playfair Display",serif; font-weight:700; letter-spacing:.04em; font-size:clamp(14px,2.2vmin,18px); padding:6px 10px; border-bottom:2px solid transparent; transition:all .25s ease; }
+.nav-tabs a{
+  text-decoration:none; color:var(--gold);
+  font-family:"Playfair Display",serif; font-weight:700; letter-spacing:.04em;
+  font-size:clamp(14px,2.2vmin,18px);
+  padding:6px 10px; border-bottom:2px solid transparent; transition:all .25s ease;
+}
 .nav-tabs a:hover, .nav-tabs a.active{ color:#fff0c6; border-bottom:2px solid #fff0c6; }
 
 @media print{ .nav-tabs{display:none} .page{padding:0} }
@@ -82,21 +120,40 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:v
 </nav>
 
 <script>
-/* Hide tabs when scrolling UP; show after user stops */
+/* Hide tabs when scrolling UP; show when scrolling DOWN; reveal after stop */
 (function(){
   const nav=document.querySelector('.nav-tabs');
-  let lastY=pageYOffset||document.documentElement.scrollTop, timer=null;
-  addEventListener('scroll',()=>{
-    const y=pageYOffset||document.documentElement.scrollTop;
-    const dy=y-lastY;
-    if(dy< -4 && y>60){ nav.classList.add('hide'); } // scrolling UP → hide
-    clearTimeout(timer);
-    timer=setTimeout(()=>nav.classList.remove('hide'), 250); // show after stop
-    lastY=y;
-  },{passive:true});
-})();
+  let lastY = window.pageYOffset || document.documentElement.scrollTop;
+  let ticking=false, revealTimer=null;
 
-/* Fireworks: random bursts, full sky to very top, always behind card */
+  function onScroll(){
+    const y = window.pageYOffset || document.documentElement.scrollTop;
+    const dy = y - lastY;
+
+    if(dy < -4 && y > 60){           // scrolling UP
+      nav.classList.add('hide');
+    } else if(dy > 4){               // scrolling DOWN
+      nav.classList.remove('hide');
+    }
+
+    clearTimeout(revealTimer);       // reveal after user stops
+    revealTimer = setTimeout(()=> nav.classList.remove('hide'), 250);
+
+    lastY = y;
+    ticking=false;
+  }
+
+  addEventListener('scroll', ()=>{
+    if(!ticking){
+      window.requestAnimationFrame(onScroll);
+      ticking = true;
+    }
+  }, {passive:true});
+})();
+</script>
+
+<script>
+/* Fireworks: random bursts to the very top (behind content) */
 (()=>{const c=document.getElementById('fireworks'),x=c.getContext('2d');let w,h,dpr;
 function R(){dpr=Math.max(1,Math.min(2,devicePixelRatio||1));w=c.width=Math.floor(innerWidth*dpr);h=c.height=Math.floor(innerHeight*dpr);c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(1,0,0,1,0,0);x.scale(dpr,dpr);}addEventListener('resize',R,{passive:true});R();
 const GOLD='#CBA135',CREAM='#F4EAD5',BURST='#ffe6a3',G=.06,F=.985,FADE=.18,MAXP=420;
@@ -114,12 +171,10 @@ class Rocket{
     this.vx=rnd(-0.6,0.6);
     this.vy=rnd(-10.5,-13.5);
     this.color=[GOLD,CREAM,BURST][(Math.random()*3)|0];
-    // random apex including near-top
-    this.apex=rnd(innerHeight*0.06, innerHeight*0.65);
+    this.apex=rnd(innerHeight*0.04, innerHeight*0.60); // can reach near top
   }
   step(){
     this.x+=this.vx; this.y+=this.vy; this.vy+=0.08;
-    // emit trail
     particles.push(new Particle(this.x,this.y,rnd(0.5,1.2),rnd(0,Math.PI*2),this.color,18,1.1));
     if(this.vy>=0 || this.y<=this.apex){ this.explode(); return false; }
     return true;
@@ -132,7 +187,6 @@ class Rocket{
       const spd = rnd(2.4,5.2);
       particles.push(new Particle(this.x,this.y,spd,ang,c,70,rnd(1.2,2.2)));
     }
-    // glitter
     for(let i=0;i<14;i++){
       particles.push(new Particle(this.x,this.y,rnd(1.2,2.2),rnd(0,Math.PI*2),CREAM,60,1.5));
     }
@@ -141,24 +195,19 @@ class Rocket{
 }
 function loop(){
   requestAnimationFrame(loop);
-  // fade previous frame
   x.globalCompositeOperation='source-over';
   x.fillStyle=`rgba(0,0,0,${FADE})`;
   x.fillRect(0,0,innerWidth,innerHeight);
 
-  // randomly add rockets (bursty + occasional)
   if(Math.random()<0.08) rockets.push(new Rocket());
   if(rockets.length<3 && Math.random()<0.05) rockets.push(new Rocket());
 
-  // draw rockets
   for(let i=rockets.length-1;i>=0;i--){
     if(!rockets[i].step()) rockets.splice(i,1);
     else rockets[i].draw();
   }
 
-  // cap particles
   if(particles.length>MAXP) particles.splice(0, particles.length-MAXP);
-  // draw particles additively
   x.globalCompositeOperation='lighter';
   for(let i=particles.length-1;i>=0;i--){
     const p=particles[i];
