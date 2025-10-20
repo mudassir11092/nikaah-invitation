@@ -9,15 +9,11 @@
 
 <style>
 :root{
-  --beige:#F3E7D3;      /* soft beige background */
-  --mustard:#E6B31E;    /* text & accents */
-  --marigoldA:#FFD54F;  /* petal gradient A */
-  --marigoldB:#FFA726;  /* petal gradient B */
-  --ink:#000000;
-  --panel: rgba(255,255,255,.55);
+  --beige:#F3E7D3;
+  --mustard:#E6B31E;
+  --marigoldA:#FFD54F;
+  --marigoldB:#FFA726;
 }
-
-/* Base */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -32,7 +28,7 @@ body{
   overflow-x:hidden;
 }
 
-/* Page + gold frame */
+/* frame */
 .page{
   min-height:100%;
   display:grid;
@@ -50,7 +46,7 @@ body{
     0 0 0 18px var(--mustard) inset;
 }
 
-/* Card + inner panel (light glassy) */
+/* card */
 .card{
   position:relative;
   max-width:min(920px,94vw);
@@ -66,13 +62,12 @@ body{
 }
 .panel{
   position:relative;
-  background: linear-gradient(180deg, var(--panel), rgba(255,255,255,.35));
+  background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.35));
   border:2px solid var(--mustard);
   border-radius:200px/48px 48px 28px 28px;
   padding:min(8vmin,72px) min(7vmin,64px);
   overflow:hidden;
 }
-/* faint inner texture */
 .panel::after{
   content:""; position:absolute; inset:clamp(14px,4vmin,28px); border-radius:inherit; z-index:0; opacity:.10;
   background:
@@ -81,7 +76,7 @@ body{
 }
 .panel>*{ position:relative; z-index:1; }
 
-/* Typography — all mustard */
+/* type */
 .center{text-align:center}
 .hdg,.hdg2{ font-family:"Bodoni Moda","Playfair Display",serif; color:var(--mustard); }
 .hdg{ font-weight:700; font-size:clamp(22px,3.2vmin,30px); letter-spacing:.02em; margin:.2em 0 .7em; }
@@ -89,33 +84,38 @@ body{
 p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:var(--mustard); }
 .rule{ width:min(200px,40%); height:2px; background:linear-gradient(90deg,transparent,var(--mustard),transparent); margin:16px auto; opacity:.95; }
 
-/* ===== MARIGOLDS ON PERIPHERY ONLY ===== */
-.periphery{
-  position:fixed; inset:0; pointer-events:none; z-index:0;
-}
-.edge{
-  position:absolute; top:0; width:10vw; min-width:64px; height:100%;
-  overflow:hidden;
-}
-.edge.left{ left:0; }
-.edge.right{ right:0; }
+/* ===== PERIPHERY MARIGOLDS (fixed, left/right) ===== */
+.periphery{ position:fixed; inset:0; pointer-events:none; z-index:0; }
+.edge{ position:absolute; top:0; width:10vw; min-width:64px; height:100%; overflow:hidden; }
+.edge.left{ left:0; } .edge.right{ right:0; }
+
+/* Outer handles VERTICAL FALL ONLY */
 .flower{
-  position:absolute; width:42px; height:42px; opacity:.65;
-  background-repeat:no-repeat; background-size:contain; background-position:center;
+  position:absolute; width:42px; height:42px; opacity:.75;
+  top:-15vh; left:0;
+  animation: fall linear infinite;
   filter: drop-shadow(0 6px 10px rgba(0,0,0,.18));
-  animation: fall linear infinite, wobble 6s ease-in-out infinite;
 }
+/* Inner handles HORIZONTAL WOBBLE ONLY (separate transforms) */
+.flower .petal{
+  width:100%; height:100%;
+  background-repeat:no-repeat; background-size:contain; background-position:center;
+  animation: wobble 6s ease-in-out infinite;
+}
+
+/* keyframes */
 @keyframes fall{
-  0%   { transform: translateY(-12vh) rotate(0deg);   opacity:0; }
-  10%  { opacity:.65; }
-  100% { transform: translateY(112vh) rotate(200deg); opacity:.55; }
+  0%   { transform: translateY(0) rotate(0deg);   opacity:0; }
+  10%  { opacity:.75; }
+  100% { transform: translateY(120vh) rotate(200deg); opacity:.6; }
 }
 @keyframes wobble{
   0%,100%{ transform: translateX(0) }
-  50%    { transform: translateX(4px) }
+  50%    { transform: translateX(6px) }
 }
-/* marigold svg variants */
-.flower[data-variant="a"]{
+
+/* marigold svg variants applied to .petal */
+.petal[data-variant="a"]{
   background-image:url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>\
 <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>\
@@ -127,7 +127,7 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 <circle cx='16' cy='40' r='10'/><circle cx='16' cy='24' r='10'/>\
 </g><circle cx='32' cy='32' r='8' fill='%23E6B31E'/></svg>");
 }
-.flower[data-variant="b"]{
+.petal[data-variant="b"]{
   background-image:url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>\
 <defs><radialGradient id='rg' cx='50%' cy='50%' r='60%'>\
@@ -138,69 +138,31 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 </g><circle cx='32' cy='32' r='6' fill='%23E6B31E'/></svg>");
 }
 
-/* ===== CORNER INSTRUMENTS (BLACK LINE ART) ===== */
-.corner{
-  position:fixed; width:160px; height:160px; pointer-events:none; z-index:3; opacity:.9;
-  background-repeat:no-repeat; background-size:contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,.03));
-}
+/* ===== BLACK INSTRUMENTS IN CORNERS ===== */
+.corner{ position:fixed; width:160px; height:160px; pointer-events:none; z-index:3; opacity:.9; background-repeat:no-repeat; background-size:contain; }
 .corner.tl{ top:14px; left:14px; transform: rotate(-6deg); }
 .corner.tr{ top:14px; right:14px; transform: rotate(6deg); }
 .corner.bl{ bottom:14px; left:14px; transform: rotate(6deg); }
 .corner.br{ bottom:14px; right:14px; transform: rotate(-6deg); }
+/* sitar */
+.corner.tl{ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'><g fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M30,150 C10,120 40,90 70,95 c25,4 30,30 20,40 -12,12 -38,8 -60,15'/><path d='M70,95 C95,75 130,45 150,30 c10-8 25,-5 20,8 -3,8 -10,10 -16,14 -16,10 -35,25 -60,45'/><line x1='75' y1='90' x2='165' y2='20'/><line x1='78' y1='94' x2='168' y2='24'/><circle cx='155' cy='30' r='6'/><circle cx='150' cy='40' r='3'/></g></svg>"); }
+/* tabla */
+.corner.tr{ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'><g fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='70' cy='110' rx='28' ry='20'/><ellipse cx='130' cy='120' rx='22' ry='16'/><circle cx='70' cy='110' r='6'/><circle cx='130' cy='120' r='5'/><path d='M42,110 c0,24 56,24 56,0'/><path d='M108,120 c0,20 44,20 44,0'/></g></svg>"); }
+/* dholak */
+.corner.bl{ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'><g fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M40,120 C60,105 110,95 140,110 160,120 160,140 140,150 110,165 60,155 40,140 Z'/><line x1='55' y1='115' x2='47' y2='145'/><line x1='75' y1='110' x2='67' y2='150'/><line x1='95' y1='106' x2='87' y2='152'/><line x1='115' y1='106' x2='107' y2='152'/><line x1='135' y1='112' x2='127' y2='148'/></g></svg>"); }
+/* harmonium */
+.corner.br{ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='160' viewBox='0 0 220 160'><g fill='none' stroke='%23000' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'><rect x='20' y='70' width='160' height='60' rx='6'/><rect x='28' y='80' width='144' height='14' rx='2'/><line x1='34' y1='96' x2='170' y2='96'/><line x1='34' y1='104' x2='170' y2='104'/><circle cx='38' cy='86' r='2'/><circle cx='46' cy='86' r='2'/><circle cx='54' cy='86' r='2'/></g></svg>"); }
 
-/* sitar (top-left) */
-.corner.tl{
-  background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'>\
-<g fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
-<path d='M30,150 C10,120 40,90 70,95 c25,4 30,30 20,40 -12,12 -38,8 -60,15'/>\
-<path d='M70,95 C95,75 130,45 150,30 c10-8 25,-5 20,8 -3,8 -10,10 -16,14 -16,10 -35,25 -60,45'/>\
-<line x1='75' y1='90' x2='165' y2='20'/><line x1='78' y1='94' x2='168' y2='24'/>\
-<circle cx='155' cy='30' r='6'/><circle cx='150' cy='40' r='3'/>\
-</g></svg>");
-}
-/* tabla (top-right) */
-.corner.tr{
-  background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'>\
-<g fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
-<ellipse cx='70' cy='110' rx='28' ry='20'/><ellipse cx='130' cy='120' rx='22' ry='16'/>\
-<circle cx='70' cy='110' r='6'/><circle cx='130' cy='120' r='5'/>\
-<path d='M42,110 c0,24 56,24 56,0'/>\
-<path d='M108,120 c0,20 44,20 44,0'/>\
-</g></svg>");
-}
-/* dholak (bottom-left) */
-.corner.bl{
-  background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'>\
-<g fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
-<path d='M40,120 C60,105 110,95 140,110 160,120 160,140 140,150 110,165 60,155 40,140 Z'/>\
-<line x1='55' y1='115' x2='47' y2='145'/><line x1='75' y1='110' x2='67' y2='150'/>\
-<line x1='95' y1='106' x2='87' y2='152'/><line x1='115' y1='106' x2='107' y2='152'/>\
-<line x1='135' y1='112' x2='127' y2='148'/>\
-</g></svg>");
-}
-/* harmonium (bottom-right) */
-.corner.br{
-  background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='220' height='160' viewBox='0 0 220 160'>\
-<g fill='none' stroke='%23000' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'>\
-<rect x='20' y='70' width='160' height='60' rx='6'/>\
-<rect x='28' y='80' width='144' height='14' rx='2'/>\
-<line x1='34' y1='96' x2='170' y2='96'/><line x1='34' y1='104' x2='170' y2='104'/>\
-<circle cx='38' cy='86' r='2'/><circle cx='46' cy='86' r='2'/><circle cx='54' cy='86' r='2'/>\
-</g></svg>");
-}
-
-/* Bottom tabs */
+/* tabs (auto-hide) */
 .nav-tabs{
   position:fixed; bottom:0; left:0; width:100%;
   display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
   background: rgba(243,231,211,.9);
   border-top:2px solid var(--mustard);
   padding:12px 10px; z-index:5; backdrop-filter: blur(4px);
+  transition: transform .4s ease, opacity .4s ease;
 }
+.nav-tabs.hide{ transform:translateY(100%); opacity:0; }
 .nav-tabs a{
   text-decoration:none; color:var(--mustard);
   font-family:"Bodoni Moda","Playfair Display",serif; font-weight:700; letter-spacing:.04em;
@@ -209,18 +171,13 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 }
 .nav-tabs a:hover, .nav-tabs a.active{ color:#a07f0d; border-bottom:2px solid #a07f0d; }
 
-@media (max-width:520px){
-  .corner{ width:128px; height:128px; }
-}
-@media print{
-  .nav-tabs,.periphery,.corner{display:none}
-  .page{padding:0}
-}
+@media (max-width:520px){ .corner{width:128px;height:128px} }
+@media print{ .nav-tabs,.periphery,.corner{display:none} .page{padding:0} }
 </style>
 </head>
 <body>
 
-<!-- Marigolds confined to left/right edges -->
+<!-- Marigolds confined to edges -->
 <div class="periphery" aria-hidden="true">
   <div class="edge left" id="edgeL"></div>
   <div class="edge right" id="edgeR"></div>
@@ -236,7 +193,7 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
   <section class="card">
     <div class="panel center">
 
-      <!-- *** WORDING KEPT EXACTLY *** -->
+      <!-- WORDING EXACTLY AS PROVIDED -->
       <p>kindly RSVP by 8th of December 2025</p>
 
       <h2 class="hdg">In humble gratitude to Allah ﷻ for His countless favours,</h2>
@@ -258,13 +215,12 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 
       <p>Your esteemed presence will honour the family and add joy to the celebration.</p>
       <p>kindly RSVP by 8th of December 2025</p>
-      <!-- *** END WORDING *** -->
+      <!-- END WORDING -->
 
     </div>
   </section>
 </main>
 
-<!-- Bottom navigation -->
 <nav class="nav-tabs">
   <a href="index.html">Welcome</a>
   <a href="mehndi.html">Mehndi</a>
@@ -275,47 +231,53 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 </nav>
 
 <script>
-/* Spawn marigolds along edges only */
-function spawnInEdge(container){
-  const COUNT = 14; // per edge
-  for(let i=0;i<COUNT;i++){
-    const f = document.createElement('div');
-    f.className = 'flower';
-    f.dataset.variant = Math.random() < 0.5 ? 'a' : 'b';
-    // random horizontal position within the edge column
-    f.style.left = Math.random()*90 + '%';
-    // start slightly above the viewport
-    f.style.top = (-10 - Math.random()*30) + 'vh';
-    // timing
-    const dur = 12 + Math.random()*12;
-    const delay = Math.random()*8;
-    f.style.animationDuration = dur + 's, 6s';
-    f.style.animationDelay = delay + 's, 0s';
-    // small size variety
-    const size = 32 + Math.floor(Math.random()*18);
-    f.style.width = f.style.height = size + 'px';
-    container.appendChild(f);
-    // cleanup & respawn after it falls
-    setTimeout(() => { f.remove(); spawnOne(container); }, (dur+delay)*1000 + 800);
-  }
+/* auto-hide tabs */
+(function(){
+  let last=0; const nav=document.querySelector('.nav-tabs');
+  addEventListener('scroll',()=>{const y=pageYOffset||document.documentElement.scrollTop;
+    if(y>last && y>80){nav.classList.add('hide')} else {nav.classList.remove('hide')}
+    last=Math.max(0,y);
+  },{passive:true});
+})();
+
+/* Spawn marigolds down each edge — using nested .petal to avoid transform conflicts */
+function spawnColumn(container){
+  const TARGET = 14; // subtle density per edge
+  for(let i=0;i<TARGET;i++) spawnOne(container);
 }
 function spawnOne(container){
-  const f = document.createElement('div');
-  f.className = 'flower';
-  f.dataset.variant = Math.random() < 0.5 ? 'a' : 'b';
-  f.style.left = Math.random()*90 + '%';
-  f.style.top = (-10 - Math.random()*30) + 'vh';
-  const dur = 12 + Math.random()*12;
-  const delay = Math.random()*8;
-  f.style.animationDuration = dur + 's, 6s';
-  f.style.animationDelay = delay + 's, 0s';
+  const outer = document.createElement('div'); // handles fall
+  outer.className = 'flower';
+  // horizontal position within the narrow edge
+  outer.style.left = (Math.random()*85) + '%';
+  // start above viewport
+  outer.style.top = (-10 - Math.random()*30) + 'vh';
+
+  // durations
+  const dur = 12 + Math.random()*12;       // fall seconds
+  const delay = Math.random()*8;            // stagger
+  outer.style.animationDuration = dur + 's';
+  outer.style.animationDelay = delay + 's';
+
+  // size variety
   const size = 32 + Math.floor(Math.random()*18);
-  f.style.width = f.style.height = size + 'px';
-  container.appendChild(f);
-  setTimeout(() => { f.remove(); spawnOne(container); }, (dur+delay)*1000 + 800);
+  outer.style.width = outer.style.height = size + 'px';
+
+  // inner sprite for wobble + svg
+  const inner = document.createElement('span');
+  inner.className = 'petal';
+  inner.setAttribute('data-variant', Math.random()<0.5 ? 'a' : 'b');
+  inner.style.animationDelay = (Math.random()*2).toFixed(2) + 's';
+  outer.appendChild(inner);
+
+  container.appendChild(outer);
+
+  // cleanup and respawn after it falls
+  setTimeout(()=>{ outer.remove(); spawnOne(container); }, (dur+delay)*1000 + 600);
 }
-spawnInEdge(document.getElementById('edgeL'));
-spawnInEdge(document.getElementById('edgeR'));
+
+spawnColumn(document.getElementById('edgeL'));
+spawnColumn(document.getElementById('edgeR'));
 </script>
 
 </body>
