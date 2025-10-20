@@ -5,22 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Mehndi Ceremony — Mehr-e-Bahar</title>
 
-<!-- Web fallbacks for requested fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600;700&family=Cormorant+Garamond:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --emerald:#0B6E4F;
-  --emerald-deep:#084c37;
-  --mustard:#E0C45C;
-  --coral:#E97A7A;
-  --ivory:#FFF8E7;
-  --ink:rgba(0,0,0,.25);
+  --emerald:#0B6E4F; --emerald-deep:#084c37;
+  --mustard:#E0C45C; --coral:#E97A7A; --ivory:#FFF8E7;
 }
-
-/* Base */
-*{box-sizing:border-box}
-html,body{height:100%}
+/* Base ------------------------------------------------------- */
+*{box-sizing:border-box} html,body{height:100%}
 body{
   margin:0;
   background:
@@ -28,275 +21,159 @@ body{
     radial-gradient(1400px 700px at 50% 110%, rgba(224,196,92,.08), transparent 60%),
     var(--emerald-deep);
   color:var(--ivory);
-  font-family: "Source Sans 3","Myriad Pro","Myriad Pro Light",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Open Sans",sans-serif;
-  line-height:1.48;
-  overflow-x:hidden;
+  font-family:"Source Sans 3",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Open Sans",sans-serif;
+  line-height:1.48; overflow-x:hidden;
 }
 
-/* Page wrapper (positions border, motifs, and card) */
-.page{
-  min-height:100%;
-  display:grid;
-  place-items:center;
-  padding:5vmin 3vmin 90px; /* space for bottom tabs */
-  position:relative;
-  z-index:0;
-}
-
-/* Ornamental mustard border */
+/* Frame & layout --------------------------------------------- */
+.page{ min-height:100%; display:grid; place-items:center; padding:5vmin 3vmin 90px; position:relative; z-index:0; }
 .page::before{
-  content:"";
-  position:fixed; inset:20px;
-  border-radius:18px;
-  pointer-events:none;
-  box-shadow:
-    0 0 0 2px var(--mustard) inset,
-    0 0 0 16px rgba(0,0,0,.15) inset,
-    0 0 0 18px var(--mustard) inset;
-  z-index:2;
+  content:""; position:fixed; inset:20px; border-radius:18px; pointer-events:none; z-index:3;
+  box-shadow:0 0 0 2px var(--mustard) inset, 0 0 0 16px rgba(0,0,0,.15) inset, 0 0 0 18px var(--mustard) inset;
 }
 
-/* Subtle paisley corner strokes */
-.page::after{
-  content:"";
-  position:fixed; inset:0; pointer-events:none; z-index:0;
-  background:
-    url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'>\
-<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>\
-<stop offset='0' stop-color='%23F1DB86'/><stop offset='1' stop-color='%23E0C45C'/>\
-</linearGradient></defs>\
-<g fill='none' stroke='url(%23g)' stroke-opacity='.20' stroke-width='1.2'>\
-<path d='M30,120c40-80,120-90,170-40c50,50,10,120-50,160c-30,20-60,30-90,30'/>\
-<path d='M370,280c-40,80-120,90-170,40c-50-50-10-120,50-160c30-20,60-30,90-30'/>\
-</g></svg>") center/cover no-repeat;
-  opacity:.18;
-  filter: blur(0.3px);
-}
-
-/* =========================
-   HENNA MOTIF BACKGROUND
-   ========================= */
-.motifs{
-  position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden;
-}
-.motif{
-  position:absolute; width:180px; height:180px; opacity:0;
-  background-repeat:no-repeat; background-size:contain; background-position:center;
-  filter: drop-shadow(0 8px 14px rgba(0,0,0,.28));
-  transform: translate(-50%,-50%) scale(0.6) rotate(0deg);
-  animation: bloom 9s ease-in-out infinite;
-}
-@keyframes bloom{
-  0%   { opacity:0; transform: translate(var(--x),var(--y)) scale(0.6) rotate(0deg); }
-  10%  { opacity:.55; transform: translate(var(--x),var(--y)) scale(1) rotate(8deg); }
-  50%  { opacity:.4; transform: translate(var(--x),var(--y)) scale(1.05) rotate(-6deg); }
-  80%  { opacity:.55; transform: translate(var(--x),var(--y)) scale(1) rotate(4deg); }
-  100% { opacity:0; transform: translate(var(--x),var(--y)) scale(0.6) rotate(-8deg); }
-}
-
-/* SVG motifs (mustard/coral/ivory) */
-.motif[data-type="mandala"]{
+/* Decorative vines (kept subtle) ----------------------------- */
+.vines{ position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+.vine{ position:absolute; width:520px; height:520px; opacity:.35; filter: drop-shadow(0 6px 10px rgba(0,0,0,.25)); animation: sway 12s ease-in-out infinite; background-repeat:no-repeat; background-size:contain; background-position:center; }
+.vine--lt{ left:-60px; top:-30px; transform-origin:60% 40%; animation-delay:0s; }
+.vine--rb{ right:-60px; bottom:-40px; transform-origin:40% 60%; animation-delay:6s; transform: scaleX(-1) rotate(2deg); }
+@keyframes sway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+.vine{
   background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'>\
-<g fill='none' stroke='%23E0C45C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>\
-<circle cx='120' cy='120' r='78'/><circle cx='120' cy='120' r='52'/>\
-<path d='M120 30l10 22 24 2-18 16 6 24-22-12-22 12 6-24-18-16 24-2z'/>\
+<svg xmlns='http://www.w3.org/2000/svg' width='520' height='520' viewBox='0 0 520 520'>\
+<defs><linearGradient id='stem' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23E0C45C'/><stop offset='1' stop-color='%23D4B447'/></linearGradient></defs>\
+<g fill='none' stroke='url(%23stem)' stroke-width='2.2' stroke-linecap='round'>\
+<path d='M40,500 C80,420 120,380 160,360 C220,330 260,310 300,240 C340,170 360,120 480,60'/>\
+<path d='M120,460 C160,420 200,400 240,340 C280,280 320,240 420,180'/>\
+<path d='M90,390 C130,360 150,330 200,300'/>\
 </g>\
-<g fill='%23FFF8E7' fill-opacity='.9'>\
-<circle cx='120' cy='120' r='6'/>\
-</g>\
-<g fill='%23E97A7A'><circle cx='120' cy='42' r='4'/><circle cx='162' cy='60' r='3'/><circle cx='78' cy='60' r='3'/></g>\
-</svg>");
-}
-.motif[data-type="paisley"]{
-  background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>\
-<defs><linearGradient id='ms' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23E0C45C'/><stop offset='1' stop-color='%23D1B14E'/></linearGradient></defs>\
-<path d='M120 30c30 15 45 45 32 72-15 30-52 38-82 26C45 117 35 90 48 68c14-24 47-38 72-38z' fill='url(%23ms)' fill-opacity='.35' stroke='%23E0C45C' stroke-width='2'/>\
-<circle cx='110' cy='70' r='6' fill='%23E97A7A'/>\
-<circle cx='96' cy='88' r='4' fill='%23FFF8E7'/>\
-</svg>");
-}
-.motif[data-type="flower"]{
-  background-image:url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'>\
-<g fill='none' stroke='%23E0C45C' stroke-width='2'>\
-<circle cx='110' cy='110' r='58'/>\
-<path d='M110 34c10 14 10 28 0 42c-10-14-10-28 0-42zM110 144c10 14 10 28 0 42c-10-14-10-28 0-42zM34 110c14-10 28-10 42 0c-14 10-28 10-42 0zM144 110c14-10 28-10 42 0c-14 10-28 10-42 0z'/>\
-</g>\
-<circle cx='110' cy='110' r='6' fill='%23E97A7A'/>\
-</svg>");
-}
-
-/* Card + Headband + Panel */
-.card{
-  position:relative;
-  max-width:min(920px, 94vw);
-  width:100%;
-  z-index:3; /* above motifs & border */
-}
-.banner{
-  height:64px;
-  border:2px solid var(--mustard);
-  border-radius:16px 16px 0 0;
-  background:
-    url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'>\
-<g fill='none' stroke='%23E0C45C' stroke-width='2'>\
-<path d='M0,70 Q120,20 240,70 T480,70 T720,70 T960,70 T1200,70'/>\
+<g fill='%23FFF8E7' fill-opacity='0.9'>\
+<ellipse cx='156' cy='356' rx='10' ry='18' transform='rotate(-30 156 356)'/>\
+<ellipse cx='186' cy='334' rx='9' ry='16' transform='rotate(12 186 334)'/>\
+<ellipse cx='218' cy='300' rx='10' ry='18' transform='rotate(-18 218 300)'/>\
+<ellipse cx='258' cy='270' rx='9' ry='15' transform='rotate(22 258 270)'/>\
+<ellipse cx='298' cy='230' rx='8' ry='14' transform='rotate(-18 298 230)'/>\
+<ellipse cx='336' cy='198' rx='9' ry='16' transform='rotate(18 336 198)'/>\
 </g>\
 <g fill='%23E97A7A'>\
-<circle cx='120' cy='60' r='4'/><circle cx='200' cy='40' r='3'/>\
-<circle cx='360' cy='60' r='4'/><circle cx='440' cy='40' r='3'/>\
-<circle cx='600' cy='60' r='4'/><circle cx='680' cy='40' r='3'/>\
-<circle cx='840' cy='60' r='4'/><circle cx='920' cy='40' r='3'/>\
-<circle cx='1080' cy='60' r='4'/>\
-</g></svg>") center/1200px 120px no-repeat,
-    linear-gradient(180deg, rgba(224,196,92,.12), rgba(224,196,92,.05));
-  box-shadow: 0 8px 18px rgba(0,0,0,.25);
+<circle cx='120' cy='460' r='5'/><circle cx='200' cy='300' r='4'/><circle cx='260' cy='270' r='4'/><circle cx='300' cy='240' r='4'/><circle cx='420' cy='180' r='5'/><circle cx='480' cy='60' r='5'/>\
+</g></svg>");
 }
+
+/* Card -------------------------------------------------------- */
+.card{ position:relative; max-width:min(920px,94vw); width:100%; z-index:4; }
+.banner{ height:64px; border:2px solid var(--mustard); border-radius:16px 16px 0 0; background:linear-gradient(180deg, rgba(224,196,92,.12), rgba(224,196,92,.05)); box-shadow:0 8px 18px rgba(0,0,0,.25); }
 .panel{
-  position:relative;
-  background: linear-gradient(180deg, #0a5b43 0%, #094e39 100%);
-  border:2px solid var(--mustard);
-  border-top:none;
-  border-radius:0 0 24px 24px;
-  padding: clamp(22px, 6vmin, 48px);
-  box-shadow:
-    0 0 0 14px var(--emerald) inset,
-    0 0 0 16px var(--mustard) inset,
-    0 24px 50px rgba(0,0,0,.45);
+  position:relative; background: linear-gradient(180deg, #0a5b43 0%, #094e39 100%); border:2px solid var(--mustard); border-top:none;
+  border-radius:0 0 24px 24px; padding: clamp(22px, 6vmin, 48px);
+  box-shadow: 0 0 0 14px var(--emerald) inset, 0 0 0 16px var(--mustard) inset, 0 24px 50px rgba(0,0,0,.45);
   overflow:hidden;
 }
-/* Arched inner plate */
 .panel::before{
-  content:"";
-  position:absolute; left:50%; top:-18%;
-  width:86%; height:72%;
-  transform:translateX(-50%);
+  content:""; position:absolute; left:50%; top:-18%; width:86%; height:72%; transform:translateX(-50%);
   background: radial-gradient(130% 70% at 50% 15%, rgba(255,255,255,.06), transparent 60%), #0a5b43;
-  border:2px solid var(--mustard);
-  border-radius: 260px/110px 110px 34px 34px;
+  border:2px solid var(--mustard); border-radius: 260px/110px 110px 34px 34px;
   box-shadow: inset 0 0 0 14px rgba(11,110,79,.55), inset 0 0 0 16px rgba(224,196,92,.45);
 }
-/* Ivory jaali under text */
 .panel::after{
-  content:"";
-  position:absolute; inset: clamp(16px, 4.4vmin, 32px);
-  z-index:0; opacity:.16;
-  background:
-    repeating-linear-gradient(45deg, var(--ivory) 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(-45deg, var(--ivory) 0 1px, transparent 1px 22px);
-  border-radius: 200px/60px 60px 24px 24px;
-  filter: drop-shadow(0 0 4px rgba(255,250,240,.08));
+  content:""; position:absolute; inset: clamp(16px, 4.4vmin, 32px); z-index:0; opacity:.16;
+  background: repeating-linear-gradient(45deg, var(--ivory) 0 1px, transparent 1px 22px), repeating-linear-gradient(-45deg, var(--ivory) 0 1px, transparent 1px 22px);
+  border-radius: 200px/60px 60px 24px 24px; filter: drop-shadow(0 0 4px rgba(255,250,240,.08));
 }
-.content{ position:relative; z-index:1; }
+.content{ position:relative; z-index:1;}
+.badge{ margin:-36px auto 10px; width:max-content; padding:8px 14px; border:2px solid var(--mustard); border-radius:999px; background:linear-gradient(180deg, rgba(224,196,92,.18), rgba(224,196,92,.06)); font-family:"Bodoni Moda","Playfair Display",serif; color:var(--mustard); letter-spacing:.06em; text-transform:uppercase; font-weight:700; font-size:clamp(12px,1.8vmin,14px); box-shadow:0 6px 12px rgba(0,0,0,.25); }
 
-/* Mehr-e-Bahar badge */
-.badge{
-  margin:-36px auto 10px; width:max-content; padding:8px 14px;
-  border:2px solid var(--mustard); border-radius:999px;
-  background: linear-gradient(180deg, rgba(224,196,92,.18), rgba(224,196,92,.06));
-  font-family:"Bodoni Moda","Playfair Display",serif; color:var(--mustard);
-  letter-spacing:.06em; text-transform:uppercase; font-weight:700;
-  font-size:clamp(12px,1.8vmin,14px); box-shadow:0 6px 12px rgba(0,0,0,.25);
-}
-
-/* Type */
+/* Typography --------------------------------------------------- */
 .center{text-align:center}
 p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); }
-.hdg{
-  font-family:"Bodoni Moda","Didot","Playfair Display",serif;
-  font-weight:700; letter-spacing:.02em; color:var(--mustard);
-  font-size: clamp(22px, 3.2vmin, 30px); text-align:center; margin:.2em 0 .7em;
-}
-.sub{
-  font-family:"Bodoni Moda","Didot","Playfair Display",serif;
-  font-weight:600; color:var(--mustard); text-align:center; font-size:clamp(16px,2.2vmin,20px);
-}
-.title{
-  font-family:"Bodoni Moda","Didot","Playfair Display",serif;
-  color:var(--mustard); text-transform:uppercase; letter-spacing:.12em; font-weight:700;
-  font-size: clamp(20px, 3.2vmin, 28px); text-align:center; margin:.5em 0 .2em;
-}
-/* Couple */
-.couple{
-  font-family:"Cormorant Garamond","Mrs Eaves OT","Bodoni Moda",serif;
-  font-weight:700; color:var(--coral);
-  font-size: clamp(30px, 5.6vmin, 56px);
-  line-height:1.08; text-align:center; margin:.2em 0 .1em;
-  text-shadow:0 0 1px var(--ink);
-}
-/* Divider & emphasis */
-.rule{ width:min(200px,38%); height:2px; background:linear-gradient(90deg,transparent,var(--mustard),transparent); margin:16px auto; opacity:.95; }
-.emph{ color:var(--mustard); font-weight:600; }
-.venue{ font-weight:600; }
+.hdg{ font-family:"Bodoni Moda","Didot","Playfair Display",serif; font-weight:700; letter-spacing:.02em; color:var(--mustard); font-size:clamp(22px,3.2vmin,30px); text-align:center; margin:.2em 0 .7em; }
+.sub{ font-family:"Bodoni Moda","Didot","Playfair Display",serif; font-weight:600; color:var(--mustard); text-align:center; font-size:clamp(16px,2.2vmin,20px); }
+.title{ font-family:"Bodoni Moda","Didot","Playfair Display",serif; color:var(--mustard); text-transform:uppercase; letter-spacing:.12em; font-weight:700; font-size:clamp(20px,3.2vmin,28px); text-align:center; margin:.5em 0 .2em; }
+.couple{ font-family:"Cormorant Garamond","Mrs Eaves OT","Bodoni Moda",serif; font-weight:700; color:var(--coral); font-size:clamp(30px,5.6vmin,56px); line-height:1.08; text-align:center; margin:.2em 0 .1em; }
 
-/* Bottom nav tabs */
+/* ===== Henna PNG sides (fade in/out) ======================== */
+.henna-sides{
+  position:fixed; inset:0; pointer-events:none; z-index:2; /* above vines, below content */
+}
+.henna-col{
+  position:absolute; top:0; width:12vw; min-width:76px; height:100%;
+  display:flex; flex-direction:column; justify-content:space-around; align-items:center;
+  gap:8vh; padding:3vh 0;
+}
+.henna-col.left{ left:0; }
+.henna-col.right{ right:0; transform: scaleX(-1); } /* mirror for variety; remove if not desired */
+
+.henna{
+  width:min(75%, 220px); max-width:220px; opacity:0;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,.35));
+  animation: hennaFade var(--dur,8s) ease-in-out var(--delay,0s) infinite both;
+  /* Slight drift so it feels alive */
+  transform: translateY(0);
+}
+@keyframes hennaFade{
+  0%{ opacity:0; transform: translateY(6px); }
+  15%{ opacity:.85; transform: translateY(0); }
+  55%{ opacity:.9; }
+  80%{ opacity:.1; }
+  100%{ opacity:0; transform: translateY(-4px); }
+}
+
+/* Tabs (auto-hide) ------------------------------------------- */
 .nav-tabs{
-  position:fixed; bottom:0; left:0; width:100%;
-  display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
-  background: rgba(8, 76, 55, 0.92);
-  border-top:2px solid var(--mustard);
-  padding:12px 10px; z-index:10; backdrop-filter: blur(4px);
+  position:fixed; bottom:0; left:0; width:100%; display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
+  background: rgba(8, 76, 55, 0.92); border-top:2px solid var(--mustard); padding:12px 10px; z-index:10; backdrop-filter: blur(4px);
+  transition: transform .4s ease, opacity .4s ease;
 }
-.nav-tabs a{
-  text-decoration:none; color:var(--mustard);
-  font-family:"Bodoni Moda","Playfair Display",serif; font-weight:600; letter-spacing:.04em;
-  font-size:clamp(14px,2.2vmin,18px);
-  padding:6px 10px; border-bottom:2px solid transparent; transition:all .25s ease;
-}
+.nav-tabs.hide{ transform:translateY(100%); opacity:0; }
+.nav-tabs a{ text-decoration:none; color:var(--mustard); font-family:"Bodoni Moda","Playfair Display",serif; font-weight:600; letter-spacing:.04em; font-size:clamp(14px,2.2vmin,18px); padding:6px 10px; border-bottom:2px solid transparent; transition:all .25s ease; }
 .nav-tabs a:hover, .nav-tabs a.active{ color:#fff2b3; border-bottom:2px solid #fff2b3; }
 
-@media (max-width:520px){
-  .motif{ width:140px; height:140px; }
+@media (max-width:720px){
+  .henna-col{ width:16vw; min-width:64px; }
+  .henna{ max-width:160px; }
 }
-@media print{
-  .nav-tabs{display:none}
-  .page{padding:0}
-}
+@media print{ .nav-tabs,.henna-sides,.vines{display:none} .page{padding:0} }
 </style>
 </head>
 <body>
 
+<!-- Henna PNG side strips (fades) -->
+<div class="henna-sides" aria-hidden="true">
+  <div class="henna-col left" id="hennaLeft"></div>
+  <div class="henna-col right" id="hennaRight"></div>
+</div>
+
+<!-- Background vines (subtle) -->
+<div class="vines" aria-hidden="true">
+  <div class="vine vine--lt"></div>
+  <div class="vine vine--rb"></div>
+</div>
+
 <main class="page">
-
-  <!-- Animated henna motif layer -->
-  <div class="motifs" aria-hidden="true" id="motifs"></div>
-
   <section class="card">
     <div class="banner"></div>
     <div class="panel">
       <div class="badge">Mehr-e-Bahar</div>
-
       <div class="content center">
+        <!-- *** WORDING KEPT EXACTLY AS PROVIDED *** -->
         <h2 class="hdg">With hearts alight in joy and gratitude to Allah ﷻ</h2>
         <p class="sub">Alhaj Mr Asif Ali Sayed &amp; Mrs Wahida Sayed</p>
-
-        <div class="rule"></div>
-
+        <div class="rule" style="width:min(220px,40%)"></div>
         <p>Delightfully invite you to an evening of colour, laughter, and blessings as we celebrate the joyous</p>
-
         <div class="title">Mehndi Ceremony</div>
-
         <p>of their beloved son</p>
-
         <h1 class="couple">Hafiz Sayed Mudassir Ali</h1>
-
         <p>Join us as we fill the night with the sparkle of lights, the rhythm of Joy, the fragrance of henna, and offering heartfelt duas for his upcoming union.</p>
-
-        <div class="rule"></div>
-
-        <p class="emph">In'sha Allah on: 22nd of December 2025 ~ 1st of Rajab 1447 AH<br/>from 06:30 pm onwards</p>
-        <p class="venue">At ~ The Club House, Raheja Vistas Premiere, Mohammedwadi, Pune: 411 060</p>
+        <div class="rule" style="width:min(200px,38%)"></div>
+        <p>In'sha Allah on: 22nd of December 2025 ~ 1st of Rajab 1447 AH<br/>from 06:30 pm onwards</p>
+        <p>At ~ The Club House, Raheja Vistas Premiere, Mohammedwadi, Pune: 411 060</p>
         <p>Your presence will add beauty to the colours, joy to the laughter, and barakah to the celebration.</p>
+        <!-- *** END WORDING *** -->
       </div>
     </div>
   </section>
 </main>
 
-<!-- Bottom navigation tabs (Mehndi active here) -->
 <nav class="nav-tabs">
   <a href="index.html">Welcome</a>
   <a href="mehndi.html" class="active">Mehndi</a>
@@ -307,44 +184,49 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); }
 </nav>
 
 <script>
-/* Create floating henna motifs that pop/fade around the background */
-const motifs = document.getElementById('motifs');
-const TYPES = ['mandala','paisley','flower'];
-const COUNT = 10; // number on screen; keep modest for performance
+/* Auto-hide tabs on scroll */
+(function(){
+  let last=0; const nav=document.querySelector('.nav-tabs');
+  addEventListener('scroll',()=>{const y=pageYOffset||document.documentElement.scrollTop;
+    if(y>last && y>80){nav.classList.add('hide')} else {nav.classList.remove('hide')}
+    last=Math.max(0,y);
+  },{passive:true});
+})();
 
-function spawnMotif(){
-  const m = document.createElement('div');
-  m.className = 'motif';
-  m.dataset.type = TYPES[Math.floor(Math.random()*TYPES.length)];
+/* ==== Henna PNG fade system ==================================
+   Put your image file as: henna.png  (same folder as this page)
+   If your filename is different, change IMG_SRC below.       */
+(function(){
+  const IMG_SRC = 'henna.png'; // <-- change if needed
+  const leftCol = document.getElementById('hennaLeft');
+  const rightCol = document.getElementById('hennaRight');
 
-  // random position in viewport
-  const x = Math.random()*100;    // vw
-  const y = Math.random()*100;    // vh
-  m.style.setProperty('--x', x+'vw');
-  m.style.setProperty('--y', y+'vh');
+  // How many stacked instances per side (staggered)
+  const COUNT = 5;
 
-  // random stagger/duration/size
-  const delay = (Math.random()*6).toFixed(2)+'s';
-  const dur = (7 + Math.random()*6).toFixed(2)+'s';
-  const size = 120 + Math.floor(Math.random()*120);
-  m.style.animationDelay = delay;
-  m.style.animationDuration = dur;
-  m.style.width = m.style.height = size+'px';
+  function addOne(col){
+    const img = document.createElement('img');
+    img.className = 'henna';
+    img.alt = '';
+    img.src = IMG_SRC;
+    // Randomize duration & delay so they don't sync
+    const dur = (7 + Math.random()*5).toFixed(2) + 's';
+    const delay = (Math.random()*4).toFixed(2) + 's';
+    img.style.setProperty('--dur', dur);
+    img.style.setProperty('--delay', delay);
+    // Slight random width within bounds
+    const w = 66 + Math.round(Math.random()*22); // %
+    img.style.width = w + '%';
+    // Slight rotation variety
+    img.style.transform += ` rotate(${(Math.random()*6-3).toFixed(1)}deg)`;
+    col.appendChild(img);
+    // recycle occasionally to reshuffle timings
+    const ttl = (parseFloat(dur) + parseFloat(delay)) * 1000;
+    setTimeout(()=>{ img.remove(); addOne(col); }, ttl + 1200);
+  }
 
-  motifs.appendChild(m);
-
-  // remove after its animation completes
-  const totalMs = (parseFloat(delay)+parseFloat(dur))*1000;
-  setTimeout(()=> m.remove(), totalMs + 200);
-}
-
-function keepField(){
-  // keep ~COUNT motifs active by spawning periodically
-  const active = motifs.querySelectorAll('.motif').length;
-  for(let i=active;i<COUNT;i++) spawnMotif();
-}
-keepField();
-setInterval(keepField, 1200); // periodically top up
+  for(let i=0;i<COUNT;i++){ addOne(leftCol); addOne(rightCol); }
+})();
 </script>
 
 </body>
