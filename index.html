@@ -1,15 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mudassir ♥ Farhana — Wedding Invitation</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mudassir ♥ Farhana — Wedding Invitation</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    /* Your existing CSS code */
-  </style>
+<style>
+:root{
+  --navy:#0B3D91;        /* royal blue */
+  --navy-dark:#081F4D;   /* deep navy for depth */
+  --gold:#D4AF37;        /* metallic gold */
+  --gold-light:#E8D28D;
+  --ivory:#fffaf0;
+}
+
+/* Reset + base */
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  background: radial-gradient(1000px 600px at 50% -10%, rgba(212,175,55,0.12), transparent 60%),
+              radial-gradient(1000px 600px at 50% 110%, rgba(11,61,145,0.35), transparent 60%),
+              var(--navy-dark);
+  color: var(--gold);
+  font-family: "Cormorant Garamond", serif;
+  line-height: 1.5;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Twinkling stars */
+.stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: fall linear infinite, twinkle 2.2s ease-in-out infinite alternate;
+}
+@keyframes fall {
+  from {transform: translateY(-10vh) rotate(0deg);}
+  to {transform: translateY(100vh) rotate(360deg);}
+}
+@keyframes twinkle {
+  0% {opacity: 0.3;}
+  100% {opacity: 1;}
+}
+
+/* Gold lattice overlay */
+.lattice {
+  position: fixed;
+  inset: 0;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><g fill='none' stroke='%23D4AF37' stroke-width='1.2'><circle cx='40' cy='0' r='40'/><circle cx='40' cy='80' r='40'/><circle cx='0' cy='40' r='40'/><circle cx='80' cy='40' r='40'/></g></svg>");
+  background-size:80px 80px;
+  opacity:0.28;
+  filter:drop-shadow(0 0 8px rgba(212,175,55,.35));
+  pointer-events:none;
+  z-index:2;
+}
+
+/* Center image container */
+.page {
+  display:grid;
+  place-items:center;
+  height:100%;
+  position:relative;
+  z-index:3;
+  padding-bottom:80px;
+}
+
+.hero-wrap { width:100%; display:grid; place-items:center; }
+
+.hero-img {
+  max-width:min(960px,94vw);
+  width:100%;
+  height:auto;
+  border-radius:24px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.45);
+}
+
+/* Bottom navigation tabs */
+.nav-tabs {
+  position:fixed;
+  bottom:0; left:0; width:100%;
+  display:flex; justify-content:center; gap:24px;
+  background:rgba(8,31,77,0.9);
+  border-top:2px solid var(--gold);
+  padding:12px 10px;
+  z-index:10;
+  backdrop-filter: blur(4px);
+  transition: transform .4s ease, opacity .4s ease;
+}
+.nav-tabs.hide { transform:translateY(100%); opacity:0; }
+
+.nav-tabs a {
+  text-decoration:none;
+  color:var(--gold);
+  font-family:"Playfair Display",serif;
+  font-weight:600;
+  letter-spacing:0.05em;
+  font-size:clamp(14px,2.2vmin,18px);
+  padding:6px 10px;
+  border-bottom:2px solid transparent;
+  transition:all .3s ease;
+}
+.nav-tabs a:hover,
+.nav-tabs a.active {
+  color:var(--gold-light);
+  border-bottom:2px solid var(--gold-light);
+}
+
+@media print { .stars,.lattice,.nav-tabs{display:none;} }
+</style>
 </head>
 <body>
 
@@ -18,11 +127,10 @@
 
 <main class="page">
   <div class="hero-wrap">
-    <img id="cover" src="1st-page.png" alt="Wedding Invitation Cover" class="hero-img">
+    <img src="1st-page.png" alt="Wedding Invitation Cover" class="hero-img">
   </div>
 </main>
 
-<!-- Bottom Tabs -->
 <nav class="nav-tabs">
   <a href="index.html" class="active">Welcome</a>
   <a href="mehndi.html">Mehndi</a>
@@ -33,7 +141,7 @@
 </nav>
 
 <script>
-// Stars
+/* Twinkling falling stars */
 const starsContainer=document.querySelector('.stars');
 for(let i=0;i<70;i++){
   const s=document.createElement('div');
@@ -42,18 +150,25 @@ for(let i=0;i<70;i++){
   s.style.top=Math.random()*100+'vh';
   s.style.width=s.style.height=2+Math.random()*3+'px';
   s.style.animationDuration=4+Math.random()*6+'s';
-  s.style.opacity=0.5+Math.random()*0.5;
+  s.style.animationDelay=Math.random()*5+'s';
   starsContainer.appendChild(s);
 }
 
-// Image Loading Check
-const img = document.getElementById('cover');
-img.onload = function() {
-  console.log("Image loaded successfully:", img.src);
-};
-img.onerror = function() {
-  console.error("Failed to load image:", img.src);
-};
+/* Hide tabs while scrolling up, show when stopped */
+(function(){
+  const nav=document.querySelector('.nav-tabs');
+  let lastScrollY=0, timer;
+  window.addEventListener('scroll',()=>{
+    clearTimeout(timer);
+    if(window.scrollY>lastScrollY && window.scrollY>60){
+      nav.classList.add('hide');
+    }else{
+      nav.classList.remove('hide');
+    }
+    lastScrollY=window.scrollY;
+    timer=setTimeout(()=>nav.classList.remove('hide'),250);
+  });
+})();
 </script>
 
 </body>
