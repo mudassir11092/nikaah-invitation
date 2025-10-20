@@ -47,7 +47,7 @@ body{
 }
 @keyframes fall {
   from {transform: translateY(-10vh) rotate(0deg);}
-  to {transform: translateY(100vh) rotate(360deg);}
+  to   {transform: translateY(100vh) rotate(360deg);}
 }
 @keyframes twinkle {
   0% {opacity: 0.3;}
@@ -70,20 +70,22 @@ body{
 .page {
   display:grid;
   place-items:center;
-  height:100%;
+  min-height:100%;
   position:relative;
   z-index:3;
-  padding-bottom:80px;
+  padding-bottom:80px; /* breathing space above tabs */
 }
 
 .hero-wrap { width:100%; display:grid; place-items:center; }
 
+/* The poster PNG itself (no effects on the artwork) */
 .hero-img {
   max-width:min(960px,94vw);
   width:100%;
   height:auto;
-  border-radius:24px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.45);
+  display:block;
+  border-radius:0;         /* no rounding so the image is unchanged */
+  box-shadow:none;         /* no shadow so nothing overlays the design */
 }
 
 /* Bottom navigation tabs */
@@ -127,7 +129,8 @@ body{
 
 <main class="page">
   <div class="hero-wrap">
-    <img src="1st-page.png" alt="Wedding Invitation Cover" class="hero-img">
+    <!-- Use the exact filename and location; adjust path if using /images/ -->
+    <img src="1st-page.png" alt="Wedding Poster" class="hero-img">
   </div>
 </main>
 
@@ -154,20 +157,17 @@ for(let i=0;i<70;i++){
   starsContainer.appendChild(s);
 }
 
-/* Hide tabs while scrolling up, show when stopped */
+/* Optional: hide tabs while scrolling down, show on stop */
 (function(){
   const nav=document.querySelector('.nav-tabs');
-  let lastScrollY=0, timer;
-  window.addEventListener('scroll',()=>{
-    clearTimeout(timer);
-    if(window.scrollY>lastScrollY && window.scrollY>60){
-      nav.classList.add('hide');
-    }else{
-      nav.classList.remove('hide');
-    }
-    lastScrollY=window.scrollY;
-    timer=setTimeout(()=>nav.classList.remove('hide'),250);
-  });
+  let last=0, t;
+  addEventListener('scroll',()=>{
+    clearTimeout(t);
+    if(scrollY>last && scrollY>60) nav.classList.add('hide');
+    else nav.classList.remove('hide');
+    last=scrollY;
+    t=setTimeout(()=>nav.classList.remove('hide'),250);
+  },{passive:true});
 })();
 </script>
 
