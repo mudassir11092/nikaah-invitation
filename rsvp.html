@@ -16,17 +16,17 @@ body{
   line-height:1.5; overflow-x:hidden;
 }
 
-/* Subtle star trails / celestial vibe */
+/* Subtle celestial background */
 .bg{
-  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.18;
+  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.15;
   background:
-    radial-gradient(1200px 600px at 50% -10%, rgba(212,175,55,.12), transparent 60%),
-    radial-gradient(1200px 600px at 50% 110%, rgba(0,0,0,.25), transparent 60%),
-    repeating-linear-gradient(120deg, rgba(255,255,255,.08) 0 2px, transparent 2px 18px),
+    radial-gradient(1000px 600px at 50% -10%, rgba(212,175,55,.12), transparent 60%),
+    radial-gradient(1000px 600px at 50% 110%, rgba(0,0,0,.25), transparent 60%),
+    repeating-linear-gradient(120deg, rgba(255,255,255,.05) 0 2px, transparent 2px 20px),
     var(--navy);
 }
 
-/* Confetti canvas (behind content) */
+/* Confetti canvas */
 #confetti{ position:fixed; inset:0; z-index:1; pointer-events:none; }
 
 /* Layout + frame */
@@ -36,7 +36,7 @@ body{
   box-shadow: 0 0 0 2px var(--gold) inset, 0 0 0 16px rgba(255,255,255,.06) inset, 0 0 0 18px var(--gold) inset;
 }
 
-/* Card is opaque so even if we drew under it, text stays crisp */
+/* Card */
 .card{
   position:relative; max-width:min(980px,94vw); width:100%;
   background: rgba(7,26,66,.94);
@@ -60,7 +60,7 @@ body{
 p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:#f1f5ff; }
 .rule{ width:min(220px,40%); height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:16px auto; opacity:.9; }
 
-/* Tabs: hide while scrolling; reappear on stop */
+/* Tabs */
 .nav-tabs{
   position:fixed; bottom:0; left:0; width:100%;
   display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
@@ -89,7 +89,6 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:#
 <main class="page">
   <section class="card" id="card">
     <div class="panel center">
-      <!-- WORDING EXACTLY AS PROVIDED -->
       <p class="hdg2" style="letter-spacing:.02em;text-transform:none;">kindly RSVP by 8th of December 2025</p>
       <p>With best compliments and heartfelt duās from the families, grateful for your presence and prayers in making these blessed occasion truly memorable.</p>
       <p>Presented with love and respect by:<br>
@@ -102,7 +101,6 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:#
       Mehboob Ali Sayed</p>
       <div class="rule"></div>
       <p>RSVP via the link, should any difficulties arise contact Mehboob Ali Sayed (WhatsApp Only) +27671560820</p>
-      <!-- END WORDING -->
     </div>
   </section>
 </main>
@@ -117,7 +115,7 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:#
 </nav>
 
 <script>
-/* Tabs: hide while scrolling; reappear after user stops */
+/* Tabs hide on scroll */
 (function(){
   const nav=document.querySelector('.nav-tabs');
   let ticking=false, timer=null, lastY=0;
@@ -125,7 +123,7 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:#
     const y=pageYOffset||document.documentElement.scrollTop;
     if(Math.abs(y-lastY)>4 && y>60){ nav.classList.add('hide'); }
     clearTimeout(timer);
-    timer=setTimeout(()=>nav.classList.remove('hide'), 250);
+    timer=setTimeout(()=>nav.classList.remove('hide'),250);
     lastY=y; ticking=false;
   }
   addEventListener('scroll',()=>{ if(!ticking){ requestAnimationFrame(onScroll); ticking=true; }},{passive:true});
@@ -133,121 +131,60 @@ p{ margin:.9em auto; max-width:80ch; font-size:clamp(15px,2.1vmin,18px); color:#
 </script>
 
 <script>
-/* Confetti that avoids the card text area:
-   - Canvas behind content (z-index 1)
-   - We compute the card rect each frame and SKIP drawing particles that fall inside it. */
+/* Confetti: gentle fall + interactive bursts */
 (()=> {
-  const canvas = document.getElementById('confetti');
-  const ctx = canvas.getContext('2d');
-  const cardEl = document.getElementById('card');
-
-  let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  const canvas=document.getElementById('confetti');
+  const ctx=canvas.getContext('2d');
+  let dpr=Math.max(1,Math.min(2,devicePixelRatio||1)),W,H;
   function resize(){
-    const w = canvas.clientWidth = innerWidth;
-    const h = canvas.clientHeight = innerHeight;
-    canvas.width  = Math.floor(w * dpr);
-    canvas.height = Math.floor(h * dpr);
+    W=innerWidth; H=innerHeight;
+    canvas.width=W*dpr; canvas.height=H*dpr;
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
-  addEventListener('resize', resize, {passive:true});
-  resize();
+  addEventListener('resize',resize); resize();
 
-  const COLORS = ['#D4AF37','#FFFFFF','#C7B26A','#F8E6A0'];
-  const SHAPES = ['rect','circle','triangle','ribbon'];
-  const GRAV = 0.05;
-  const FRICTION = 0.995;
-  const WIND = 0.0025;
-  const COUNT = 140;       // density
-  const particles = [];
+  const COLORS=['#D4AF37','#FFFFFF','#F8E6A0','#C7B26A'];
+  const confetti=[];
+  const GRAV=0.05, FRI=0.995, COUNT=150;
 
-  function newPiece(){
-    const x = Math.random()*innerWidth;
-    const y = -20 - Math.random()*200;
-    const vx = (Math.random()-0.5)*0.9;
-    const vy = 0.6 + Math.random()*0.9;
-    const s  = 4 + Math.random()*6;
-    return {
-      x, y, vx, vy, s,
-      rot: Math.random()*Math.PI*2,
-      spin: (Math.random()-0.5)*0.12,
-      color: COLORS[(Math.random()*COLORS.length)|0],
-      shape: SHAPES[(Math.random()*SHAPES.length)|0],
-      life: 600 + (Math.random()*400)|0
-    };
+  function makePiece(x=W*Math.random(),y=-10,vx=(Math.random()-0.5)*1,vy=Math.random()*2,burst=false){
+    const s=4+Math.random()*6;
+    return{ x,y,vx,vy,s,rot:Math.random()*Math.PI*2,spin:(Math.random()-0.5)*0.2,
+      color:COLORS[(Math.random()*COLORS.length)|0],life:burst?120+Math.random()*60:600 };
   }
 
-  for(let i=0;i<COUNT;i++) particles.push(newPiece());
+  for(let i=0;i<COUNT;i++) confetti.push(makePiece());
 
-  function drawPiece(p){
-    ctx.save();
-    ctx.translate(p.x, p.y);
-    ctx.rotate(p.rot);
-    ctx.fillStyle = p.color;
-    switch(p.shape){
-      case 'rect':
-        ctx.fillRect(-p.s*0.6, -p.s*0.4, p.s*1.2, p.s*0.8);
-        break;
-      case 'circle':
-        ctx.beginPath(); ctx.arc(0,0,p.s*0.55,0,Math.PI*2); ctx.fill(); break;
-      case 'triangle':
-        ctx.beginPath();
-        ctx.moveTo(-p.s*0.7, p.s*0.6);
-        ctx.lineTo(p.s*0.7, p.s*0.6);
-        ctx.lineTo(0, -p.s*0.8);
-        ctx.closePath(); ctx.fill(); break;
-      case 'ribbon':
-        ctx.beginPath();
-        ctx.moveTo(-p.s,0);
-        ctx.quadraticCurveTo(-p.s*0.2, -p.s*0.9, p.s, 0);
-        ctx.quadraticCurveTo(p.s*0.2,  p.s*0.9, -p.s, 0);
-        ctx.fill(); break;
-    }
+  function draw(p){
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+    ctx.fillStyle=p.color;
+    ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);
     ctx.restore();
   }
 
   function loop(){
     requestAnimationFrame(loop);
-    // faint trail fade
-    ctx.fillStyle = 'rgba(0,0,0,0.20)';
-    ctx.fillRect(0,0,innerWidth,innerHeight);
-
-    // compute forbidden area (card rect) each frame
-    const r = cardEl.getBoundingClientRect();
-    const forbid = { x: r.left-4, y: r.top-4, w: r.width+8, h: r.height+8 };
-
-    for(let i=0;i<particles.length;i++){
-      const p = particles[i];
-      // physics
-      p.vx = (p.vx + (Math.random()-0.5)*WIND) * FRICTION;
-      p.vy = (p.vy + GRAV) * FRICTION;
-      p.x  += p.vx;
-      p.y  += p.vy;
-      p.rot += p.spin;
-      p.life--;
-
-      // If inside the card rect, nudge it sideways / skip draw this frame
-      const inside = (p.x>forbid.x && p.x<forbid.x+forbid.w && p.y>forbid.y && p.y<forbid.y+forbid.h);
-      if(inside){
-        p.x += (p.x < forbid.x + forbid.w/2) ? -1.6 : 1.6; // slide around card
-        continue; // skip drawing over words
-      }
-
-      // recycle off-screen or expired
-      if(p.y > innerHeight+30 || p.x < -30 || p.x > innerWidth+30 || p.life<=0){
-        particles[i] = newPiece();
-        continue;
-      }
-
-      // draw (additive-ish brightness)
-      ctx.globalCompositeOperation = 'lighter';
-      drawPiece(p);
-      ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle='rgba(0,0,0,0.15)';
+    ctx.fillRect(0,0,W,H);
+    for(let i=0;i<confetti.length;i++){
+      const p=confetti[i];
+      p.vx*=FRI; p.vy=(p.vy+GRAV)*FRI;
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.spin;
+      if(p.y>H+10||p.x<-20||p.x>W+20||p.life--<=0) confetti[i]=makePiece();
+      draw(p);
     }
   }
-  // paint a solid base once so the first frame isn't transparent
-  ctx.fillStyle = 'rgba(0,0,0,0.22)';
-  ctx.fillRect(0,0,innerWidth,innerHeight);
-  requestAnimationFrame(loop);
+  loop();
+
+  /* click burst */
+  addEventListener('click',e=>{
+    const rect=canvas.getBoundingClientRect();
+    const x=(e.clientX-rect.left), y=(e.clientY-rect.top);
+    for(let i=0;i<40;i++){
+      const a=Math.random()*2*Math.PI, sp=2+Math.random()*4;
+      confetti.push(makePiece(x,y,Math.cos(a)*sp,Math.sin(a)*sp,true));
+    }
+  });
 })();
 </script>
 
