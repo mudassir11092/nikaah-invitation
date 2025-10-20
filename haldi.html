@@ -14,6 +14,7 @@
   --marigoldA:#FFD54F;
   --marigoldB:#FFA726;
 }
+/* Base */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -28,7 +29,7 @@ body{
   overflow-x:hidden;
 }
 
-/* frame */
+/* Page & frame */
 .page{
   min-height:100%;
   display:grid;
@@ -46,7 +47,7 @@ body{
     0 0 0 18px var(--mustard) inset;
 }
 
-/* card */
+/* Card */
 .card{
   position:relative;
   max-width:min(920px,94vw);
@@ -76,7 +77,7 @@ body{
 }
 .panel>*{ position:relative; z-index:1; }
 
-/* type */
+/* Type */
 .center{text-align:center}
 .hdg,.hdg2{ font-family:"Bodoni Moda","Playfair Display",serif; color:var(--mustard); }
 .hdg{ font-weight:700; font-size:clamp(22px,3.2vmin,30px); letter-spacing:.02em; margin:.2em 0 .7em; }
@@ -84,37 +85,46 @@ body{
 p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:var(--mustard); }
 .rule{ width:min(200px,40%); height:2px; background:linear-gradient(90deg,transparent,var(--mustard),transparent); margin:16px auto; opacity:.95; }
 
-/* ===== PERIPHERY MARIGOLDS (fixed, left/right) ===== */
-.periphery{ position:fixed; inset:0; pointer-events:none; z-index:0; }
-.edge{ position:absolute; top:0; width:10vw; min-width:64px; height:100%; overflow:hidden; }
-.edge.left{ left:0; } .edge.right{ right:0; }
+/* ===== PERIPHERY MARIGOLDS (left/right columns) ===== */
+.periphery{
+  position:fixed; inset:0; pointer-events:none;
+  z-index:5; /* raise above frame/background so they’re visible */
+}
+.edge{
+  position:absolute; top:0; width:14vw; min-width:74px; height:100%;
+  overflow:hidden;
+}
+.edge.left{ left:0; }
+.edge.right{ right:0; }
 
-/* Outer handles VERTICAL FALL ONLY */
+/* Outer = vertical fall (its transform) */
 .flower{
-  position:absolute; width:42px; height:42px; opacity:.75;
-  top:-15vh; left:0;
+  position:absolute; width:46px; height:46px; opacity:.9;
+  top:-20vh; left:0;
   animation: fall linear infinite;
+  will-change: transform, opacity;
   filter: drop-shadow(0 6px 10px rgba(0,0,0,.18));
 }
-/* Inner handles HORIZONTAL WOBBLE ONLY (separate transforms) */
+/* Inner sprite = horizontal wobble (separate transform) */
 .flower .petal{
   width:100%; height:100%;
   background-repeat:no-repeat; background-size:contain; background-position:center;
   animation: wobble 6s ease-in-out infinite;
+  will-change: transform;
 }
 
-/* keyframes */
+/* Keyframes */
 @keyframes fall{
   0%   { transform: translateY(0) rotate(0deg);   opacity:0; }
-  10%  { opacity:.75; }
-  100% { transform: translateY(120vh) rotate(200deg); opacity:.6; }
+  10%  { opacity:.9; }
+  100% { transform: translateY(130vh) rotate(200deg); opacity:.7; }
 }
 @keyframes wobble{
   0%,100%{ transform: translateX(0) }
   50%    { transform: translateX(6px) }
 }
 
-/* marigold svg variants applied to .petal */
+/* SVG marigolds on .petal */
 .petal[data-variant="a"]{
   background-image:url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'>\
@@ -138,8 +148,8 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 </g><circle cx='32' cy='32' r='6' fill='%23E6B31E'/></svg>");
 }
 
-/* ===== BLACK INSTRUMENTS IN CORNERS ===== */
-.corner{ position:fixed; width:160px; height:160px; pointer-events:none; z-index:3; opacity:.9; background-repeat:no-repeat; background-size:contain; }
+/* Black instruments in corners (unchanged) */
+.corner{ position:fixed; width:160px; height:160px; pointer-events:none; z-index:6; opacity:.9; background-repeat:no-repeat; background-size:contain; }
 .corner.tl{ top:14px; left:14px; transform: rotate(-6deg); }
 .corner.tr{ top:14px; right:14px; transform: rotate(6deg); }
 .corner.bl{ bottom:14px; left:14px; transform: rotate(6deg); }
@@ -153,13 +163,13 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 /* harmonium */
 .corner.br{ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='160' viewBox='0 0 220 160'><g fill='none' stroke='%23000' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'><rect x='20' y='70' width='160' height='60' rx='6'/><rect x='28' y='80' width='144' height='14' rx='2'/><line x1='34' y1='96' x2='170' y2='96'/><line x1='34' y1='104' x2='170' y2='104'/><circle cx='38' cy='86' r='2'/><circle cx='46' cy='86' r='2'/><circle cx='54' cy='86' r='2'/></g></svg>"); }
 
-/* tabs (auto-hide) */
+/* Bottom tabs (auto-hide on scroll) */
 .nav-tabs{
   position:fixed; bottom:0; left:0; width:100%;
   display:flex; justify-content:center; gap:22px; flex-wrap:wrap;
   background: rgba(243,231,211,.9);
   border-top:2px solid var(--mustard);
-  padding:12px 10px; z-index:5; backdrop-filter: blur(4px);
+  padding:12px 10px; z-index:10; backdrop-filter: blur(4px);
   transition: transform .4s ease, opacity .4s ease;
 }
 .nav-tabs.hide{ transform:translateY(100%); opacity:0; }
@@ -192,7 +202,6 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 <main class="page">
   <section class="card">
     <div class="panel center">
-
       <!-- WORDING EXACTLY AS PROVIDED -->
       <p>kindly RSVP by 8th of December 2025</p>
 
@@ -216,7 +225,6 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
       <p>Your esteemed presence will honour the family and add joy to the celebration.</p>
       <p>kindly RSVP by 8th of December 2025</p>
       <!-- END WORDING -->
-
     </div>
   </section>
 </main>
@@ -231,7 +239,7 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
 </nav>
 
 <script>
-/* auto-hide tabs */
+/* Auto-hide tabs */
 (function(){
   let last=0; const nav=document.querySelector('.nav-tabs');
   addEventListener('scroll',()=>{const y=pageYOffset||document.documentElement.scrollTop;
@@ -240,31 +248,26 @@ p{ margin:.9em auto; max-width:75ch; font-size:clamp(15px,2.1vmin,18px); color:v
   },{passive:true});
 })();
 
-/* Spawn marigolds down each edge — using nested .petal to avoid transform conflicts */
+/* Spawn marigolds down each edge (outer fall + inner wobble) */
 function spawnColumn(container){
-  const TARGET = 14; // subtle density per edge
+  const TARGET = 14;
   for(let i=0;i<TARGET;i++) spawnOne(container);
 }
 function spawnOne(container){
-  const outer = document.createElement('div'); // handles fall
+  const outer = document.createElement('div'); // fall
   outer.className = 'flower';
-  // horizontal position within the narrow edge
-  outer.style.left = (Math.random()*85) + '%';
-  // start above viewport
-  outer.style.top = (-10 - Math.random()*30) + 'vh';
+  outer.style.left = (Math.random()*86) + '%';
+  outer.style.top  = (-10 - Math.random()*30) + 'vh';
 
-  // durations
-  const dur = 12 + Math.random()*12;       // fall seconds
-  const delay = Math.random()*8;            // stagger
+  const dur = 12 + Math.random()*12;
+  const delay = Math.random()*8;
   outer.style.animationDuration = dur + 's';
   outer.style.animationDelay = delay + 's';
 
-  // size variety
-  const size = 32 + Math.floor(Math.random()*18);
+  const size = 38 + Math.floor(Math.random()*18);
   outer.style.width = outer.style.height = size + 'px';
 
-  // inner sprite for wobble + svg
-  const inner = document.createElement('span');
+  const inner = document.createElement('span'); // wobble + sprite
   inner.className = 'petal';
   inner.setAttribute('data-variant', Math.random()<0.5 ? 'a' : 'b');
   inner.style.animationDelay = (Math.random()*2).toFixed(2) + 's';
@@ -272,12 +275,15 @@ function spawnOne(container){
 
   container.appendChild(outer);
 
-  // cleanup and respawn after it falls
+  // Recycle after fall completes
   setTimeout(()=>{ outer.remove(); spawnOne(container); }, (dur+delay)*1000 + 600);
 }
 
-spawnColumn(document.getElementById('edgeL'));
-spawnColumn(document.getElementById('edgeR'));
+/* defer spawning until DOM & first paint */
+requestAnimationFrame(() => {
+  spawnColumn(document.getElementById('edgeL'));
+  spawnColumn(document.getElementById('edgeR'));
+});
 </script>
 
 </body>
